@@ -24,7 +24,7 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../../Projects/raxos/*",
+            "url": "../*",
             "symlink": true
         }
     ],

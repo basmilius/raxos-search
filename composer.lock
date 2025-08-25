@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b79f4d6595a68995d8a90a2021439a1",
+    "content-hash": "a875feae7ec72673e586f449b027079b",
     "packages": [
         {
             "name": "cakephp/chronos",
@@ -160,7 +160,7 @@
             "version": "dev-main",
             "dist": {
                 "type": "path",
-                "url": "../../Projects/raxos/database",
+                "url": "../database",
                 "reference": "5ecc1c51f7ad089d1e7b2645c47646489e72d160"
             },
             "require": {
@@ -196,7 +196,7 @@
             "version": "dev-main",
             "dist": {
                 "type": "path",
-                "url": "../../Projects/raxos/datetime",
+                "url": "../datetime",
                 "reference": "9a1408f6a740abb06b3b978858ef30ebb0db5f2e"
             },
             "require": {
@@ -237,7 +237,7 @@
             "version": "dev-main",
             "dist": {
                 "type": "path",
-                "url": "../../Projects/raxos/foundation",
+                "url": "../foundation",
                 "reference": "e0721f683de17130c7a67d8c901e8db4f2e96c0a"
             },
             "require": {
@@ -280,7 +280,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "ext-ctype": "*"
+        "ext-ctype": "*",
+        "ext-mbstring": "*"
     },
     "platform-dev": {},
     "platform-overrides": {
