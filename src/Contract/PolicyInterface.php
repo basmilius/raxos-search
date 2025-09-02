@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Contract;
 
-use Raxos\Database\Contract\{QueryInterface, StructureInterface};
+use Raxos\Database\Contract\QueryInterface;
 use Raxos\Database\Error\DatabaseException;
+use Raxos\Database\Orm\Contract\StructureInterface;
 use Raxos\Foundation\Contract\MapInterface;
 use Raxos\Search\Error\SearchException;
 use Raxos\Search\Policy\PolicyDecision;

@@ -124,7 +124,7 @@ final class SearchProvider implements SearchProviderInterface
         }
 
         $query->select(new Select()->add(
-            __score: new ScoreStruct($scoreExpressions)
+            __score: new ScoreExpressions($scoreExpressions)
         ));
 
         return $query

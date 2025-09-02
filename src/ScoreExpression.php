@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Raxos\Search;
 
-use Raxos\Database\Contract\{ConnectionInterface, GrammarInterface, QueryInterface, QueryLiteralInterface, QueryStructInterface};
-use Raxos\Database\Query\QueryHelper;
+use Raxos\Database\Contract\{ConnectionInterface, GrammarInterface, QueryExpressionInterface, QueryInterface, QueryLiteralInterface};
 
 /**
  * Class ScoreExpression
@@ -13,13 +12,13 @@ use Raxos\Database\Query\QueryHelper;
  * @package Raxos\Search
  * @since 2.0.0
  */
-final readonly class ScoreExpression implements QueryStructInterface
+final readonly class ScoreExpression implements QueryExpressionInterface
 {
 
     /**
      * ScoreExpression constructor.
      *
-     * @param QueryLiteralInterface|QueryStructInterface $expression
+     * @param QueryLiteralInterface|QueryExpressionInterface $expression
      * @param array $params
      * @param int $weight
      *
@@ -27,7 +26,7 @@ final readonly class ScoreExpression implements QueryStructInterface
      * @since 2.0.0
      */
     public function __construct(
-        public QueryLiteralInterface|QueryStructInterface $expression,
+        public QueryLiteralInterface|QueryExpressionInterface $expression,
         public array $params = [],
         public int $weight = 1
     ) {}
@@ -39,7 +38,7 @@ final readonly class ScoreExpression implements QueryStructInterface
      */
     public function compile(QueryInterface $query, ConnectionInterface $connection, GrammarInterface $grammar): void
     {
-        QueryHelper::value($query, $this->expression);
+        $query->compile($this->expression);
         $query->raw("* {$this->weight}");
     }
 

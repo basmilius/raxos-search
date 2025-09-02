@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Filter;
 
-use Raxos\Database\Contract\{QueryInterface, StructureInterface};
-use Raxos\Database\Query\Struct;
+use Raxos\Database\Contract\QueryInterface;
+use Raxos\Database\Orm\Contract\StructureInterface;
 use Raxos\Search\{DatabaseQuery, ScoreExpression};
 use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Contract\{FilterInterface, QueryNodeInterface};
+use const Raxos\Database\Query\expr;
 
 /**
  * Class Some
@@ -62,7 +63,7 @@ final readonly class Some implements FilterInterface
         }
 
         return new ScoreExpression(
-            expression: Struct::greatest($scoreExpressions),
+            expression: expr->greatest($scoreExpressions),
             weight: $this->weight
         );
     }

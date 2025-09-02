@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace Raxos\Search\Filter;
 
 use BackedEnum;
-use Raxos\Database\Contract\{QueryInterface, StructureInterface};
+use Raxos\Database\Contract\QueryInterface;
+use Raxos\Database\Orm\Contract\StructureInterface;
 use Raxos\Database\Orm\Model;
 use Raxos\Database\Query\Literal\Literal;
 use Raxos\Search\Attribute\Filter;

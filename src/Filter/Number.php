@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Filter;
 
-use Raxos\Database\Contract\{QueryInterface, StructureInterface};
-use Raxos\Database\Query\Struct;
+use Raxos\Database\Contract\QueryInterface;
+use Raxos\Database\Orm\Contract\StructureInterface;
 use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Contract\{FilterInterface, QueryNodeInterface};
 use Raxos\Search\Error\InvalidFilterValueException;
@@ -13,6 +13,7 @@ use Raxos\Search\ScoreExpression;
 use function abs;
 use function max;
 use function Raxos\Database\Query\literal;
+use const Raxos\Database\Query\expr;
 
 /**
  * Class Number
@@ -56,7 +57,7 @@ final readonly class Number implements FilterInterface
             $to = $searchQuery->to instanceof T\NumberValue ? $searchQuery->to->value : null;
 
             if ($from !== null && $to !== null) {
-                $query->where($col, Struct::between($from, $to));
+                $query->where($col, expr->between($from, $to));
 
                 $midPoint = ($from + $to) / 2;
                 $spread = max(1, abs($to - $from));
@@ -66,7 +67,7 @@ final readonly class Number implements FilterInterface
                         then 50.0 + least(20.0, 20.0 * (1.0 - (abs({$col} - {$midPoint}) / {$spread})))
                         else 0
                     end
-                SQL
+                    SQL
                 ));
             }
 
@@ -75,7 +76,7 @@ final readonly class Number implements FilterInterface
 
                 return new ScoreExpression(literal(<<<SQL
                     case when {$col} >= {$from} then 40.0 * (1.0 / (1.0 + abs({$col} - {$from}))) else 0 end
-                SQL
+                    SQL
                 ));
             }
 
@@ -83,7 +84,7 @@ final readonly class Number implements FilterInterface
 
             return new ScoreExpression(literal(<<<SQL
                 case when {$col} <= {$from} then 40 else 0 end
-            SQL
+                SQL
             ));
         }
 
@@ -92,7 +93,7 @@ final readonly class Number implements FilterInterface
 
             return new ScoreExpression(literal(<<<SQL
                 case when {$col} = {$searchQuery->value} then 100 else 0 end
-            SQL
+                SQL
             ));
         }
 
