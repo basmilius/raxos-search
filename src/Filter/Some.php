@@ -63,7 +63,7 @@ final readonly class Some implements FilterInterface
         }
 
         return new ScoreExpression(
-            expression: expr->greatest($scoreExpressions),
+            expression: expr->greatest(...$scoreExpressions),
             weight: $this->weight
         );
     }

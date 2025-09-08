@@ -8,6 +8,7 @@ use Raxos\Database\Orm\Contract\StructureInterface;
 use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Contract\{FilterInterface, QueryNodeInterface};
 use Raxos\Search\ScoreExpression;
+use RuntimeException;
 
 /**
  * Class DateTimeRange
@@ -16,7 +17,7 @@ use Raxos\Search\ScoreExpression;
  * @package Raxos\Search\Filter
  * @since 2.0.0
  */
-final readonly class DateTimeRange implements FilterInterface
+final readonly class DateTime implements FilterInterface
 {
 
     /**
@@ -42,7 +43,7 @@ final readonly class DateTimeRange implements FilterInterface
      */
     public function apply(StructureInterface $structure, Filter $attribute, QueryInterface $query, QueryNodeInterface $searchQuery): ScoreExpression
     {
-        // TODO: Implement apply() method.
+        throw new RuntimeException('Not implemented.');
     }
 
 }
