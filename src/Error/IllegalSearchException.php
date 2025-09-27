@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Error;
 
-use Raxos\Foundation\Error\ExceptionId;
+use Raxos\Contract\Search\SearchExceptionInterface;
+use Raxos\Error\Exception;
 use Raxos\Search\Policy\PolicyDecision;
 
 /**
@@ -13,7 +14,7 @@ use Raxos\Search\Policy\PolicyDecision;
  * @package Raxos\Search\Error
  * @since 2.0.0
  */
-final class IllegalSearchException extends SearchException
+final class IllegalSearchException extends Exception implements SearchExceptionInterface
 {
 
     /**
@@ -29,7 +30,6 @@ final class IllegalSearchException extends SearchException
     )
     {
         parent::__construct(
-            ExceptionId::guess(),
             'search:illegal_search',
             $this->decision->reason
         );

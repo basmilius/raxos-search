@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Error;
 
-use Raxos\Foundation\Error\ExceptionId;
+use Raxos\Contract\Search\SearchExceptionInterface;
+use Raxos\Error\Exception;
 
 /**
  * Class InvalidRangeEndpointException
@@ -12,7 +13,7 @@ use Raxos\Foundation\Error\ExceptionId;
  * @package Raxos\Search\Error
  * @since 2.0.0
  */
-final class InvalidRangeEndpointException extends SearchException
+final class InvalidRangeEndpointException extends Exception implements SearchExceptionInterface
 {
 
     /**
@@ -30,7 +31,6 @@ final class InvalidRangeEndpointException extends SearchException
     )
     {
         parent::__construct(
-            ExceptionId::guess(),
             'search:invalid_range_endpoint',
             "Invalid range endpoint '{$this->value}' at position {$this->position}."
         );

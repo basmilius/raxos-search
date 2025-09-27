@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Raxos\Search\Attribute;
 
 use Attribute;
-use Raxos\Search\Contract\{AttributeInterface, FilterInterface};
+use Raxos\Contract\Search\{AttributeInterface, FilterInterface};
 
 /**
  * Class Filter
@@ -14,7 +14,7 @@ use Raxos\Search\Contract\{AttributeInterface, FilterInterface};
  * @since 2.0.0
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
-final class Filter implements AttributeInterface
+final readonly class Filter implements AttributeInterface
 {
 
     /**

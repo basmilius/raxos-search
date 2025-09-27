@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Raxos\Search\Attribute;
 
 use Attribute;
-use Raxos\Search\Contract\{AttributeInterface, PolicyInterface};
+use Raxos\Contract\Search\{AttributeInterface, PolicyInterface};
 
 /**
  * Class Policy

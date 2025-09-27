@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a875feae7ec72673e586f449b027079b",
+    "content-hash": "0ff37989e7db08533a768ce03a707eb0",
     "packages": [
         {
             "name": "cakephp/chronos",
@@ -156,6 +156,34 @@
             "time": "2022-11-25T14:36:26+00:00"
         },
         {
+            "name": "raxos/contract",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../contract",
+                "reference": "1e228db9825ba45c7ba627c4a6e6b3502f5796d3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Raxos\\Contract\\": "src/"
+                }
+            },
+            "license": [
+                "mit"
+            ],
+            "authors": [
+                {
+                    "name": "Bas Milius",
+                    "email": "bas@mili.us"
+                }
+            ],
+            "description": "Interfaces used in Raxos.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "raxos/database",
             "version": "dev-main",
             "dist": {
@@ -228,6 +256,34 @@
                 }
             ],
             "description": "Datetime primitives and utilities for Raxos.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "raxos/error",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../error",
+                "reference": "a06705add140272eaafba19c3fc44d594140488c"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Raxos\\Error\\": "src/"
+                }
+            },
+            "license": [
+                "mit"
+            ],
+            "authors": [
+                {
+                    "name": "Bas Milius",
+                    "email": "bas@mili.us"
+                }
+            ],
+            "description": "Error handling related features.",
             "transport-options": {
                 "relative": true
             }

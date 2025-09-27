@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Error;
 
-use Raxos\Foundation\Error\ExceptionId;
+use Raxos\Contract\Search\SearchExceptionInterface;
+use Raxos\Error\Exception;
 use Raxos\Search\Query\TokenType;
 
 /**
@@ -13,7 +14,7 @@ use Raxos\Search\Query\TokenType;
  * @package Raxos\Search\Error
  * @since 2.0.0
  */
-final class UnexpectedTokenException extends SearchException
+final class UnexpectedTokenException extends Exception implements SearchExceptionInterface
 {
 
     /**
@@ -29,7 +30,6 @@ final class UnexpectedTokenException extends SearchException
     )
     {
         parent::__construct(
-            ExceptionId::guess(),
             'search:unexpected_token',
             "Unexpected token. Expected token of type {$this->type->name}."
         );

@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace Raxos\Search;
 
 use BackedEnum;
-use Raxos\Database\Contract\{ConnectionInterface, QueryInterface, QueryValueInterface};
+use Raxos\Contract\Database\ConnectionInterface;
+use Raxos\Contract\Database\Query\{QueryInterface, QueryValueInterface};
 use Raxos\Database\Query\Query;
 use Stringable;
 
@@ -49,9 +50,9 @@ class DatabaseQuery extends Query
      * @since 2.0.0
      */
     public function where(
-        BackedEnum|float|bool|Stringable|int|string|QueryValueInterface|null $lhs = null,
-        BackedEnum|float|bool|Stringable|int|string|QueryValueInterface|null $cmp = null,
-        BackedEnum|float|bool|Stringable|int|string|QueryValueInterface|null $rhs = null
+        BackedEnum|Stringable|QueryValueInterface|string|int|float|bool|null $lhs = null,
+        BackedEnum|Stringable|QueryValueInterface|string|int|float|bool|null $cmp = null,
+        BackedEnum|Stringable|QueryValueInterface|string|int|float|bool|null $rhs = null
     ): static
     {
         if ($this->convertToOr) {

@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Raxos\Search\Filter;
 
 use BackedEnum;
-use Raxos\Database\Contract\QueryInterface;
-use Raxos\Database\Orm\Contract\StructureInterface;
+use Raxos\Contract\Database\Orm\StructureInterface;
+use Raxos\Contract\Database\Query\QueryInterface;
+use Raxos\Contract\Search\{FilterInterface, QueryNodeInterface};
 use Raxos\Database\Orm\Model;
 use Raxos\Database\Query\Literal\Literal;
 use Raxos\Search\Attribute\Filter;
-use Raxos\Search\Contract\{FilterInterface, QueryNodeInterface};
 use Raxos\Search\Error\InvalidFilterValueException;
 use Raxos\Search\Query\Token as T;
 use Raxos\Search\ScoreExpression;

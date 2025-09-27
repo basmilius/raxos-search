@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Query\Token;
 
+use Raxos\Contract\Search\QueryNodeInterface;
 use Raxos\DateTime\Date;
-use Raxos\Search\Contract\QueryNodeInterface;
 use Stringable;
 
 /**

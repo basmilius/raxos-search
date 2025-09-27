@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Raxos\Search;
 
-use Raxos\Database\Orm\Error\StructureException;
+use Raxos\Contract\Database\Orm\OrmExceptionInterface;
+use Raxos\Contract\Search\{AttributeInterface, SearchExceptionInterface};
 use Raxos\Database\Orm\Model;
 use Raxos\Database\Orm\Structure\StructureGenerator;
 use Raxos\Search\Attribute\{Filter, Policy, Preset};
-use Raxos\Search\Contract\AttributeInterface;
-use Raxos\Search\Error\{ReflectionFailedException, SearchException};
+use Raxos\Search\Error\ReflectionErrorException;
 use ReflectionException;
 use function Raxos\Foundation\reflect;
 
@@ -28,8 +28,8 @@ final class SearchModelGenerator
      * @param class-string<Model> $modelClass
      *
      * @return SearchModel
-     * @throws SearchException
-     * @throws StructureException
+     * @throws OrmExceptionInterface
+     * @throws SearchExceptionInterface
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
@@ -67,7 +67,7 @@ final class SearchModelGenerator
                 $presets
             );
         } catch (ReflectionException $err) {
-            throw new ReflectionFailedException($err);
+            throw new ReflectionErrorException($err);
         }
     }
 

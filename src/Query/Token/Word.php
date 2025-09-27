@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Query\Token;
 
-use Raxos\Search\Contract\{QueryNodeInterface, QueryTextNodeInterface};
+use Raxos\Contract\Search\{QueryNodeInterface, QueryTextNodeInterface};
 use Stringable;
 
 /**

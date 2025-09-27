@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Raxos\Search;
 
-use Raxos\Database\Orm\Contract\StructureInterface;
+use Raxos\Contract\Database\Orm\StructureInterface;
+use Raxos\Contract\DebuggableInterface;
+use Raxos\Contract\Search\PolicyInterface;
 use Raxos\Database\Orm\Model;
-use Raxos\Foundation\Contract\DebuggableInterface;
 use Raxos\Search\Attribute\{Filter, Preset};
-use Raxos\Search\Contract\PolicyInterface;
 
 /**
  * Class SearchModel

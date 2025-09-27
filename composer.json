@@ -32,7 +32,9 @@
         "ext-ctype": "*",
         "ext-mbstring": "*",
         "jetbrains/phpstorm-attributes": "^1.2",
+        "raxos/contract": "*",
         "raxos/database": "*",
+        "raxos/error": "*",
         "raxos/datetime": "*",
         "raxos/foundation": "*"
     }

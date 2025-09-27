@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Filter;
 
-use Raxos\Database\Contract\QueryInterface;
-use Raxos\Database\Orm\Contract\StructureInterface;
+use Raxos\Contract\Database\Orm\StructureInterface;
+use Raxos\Contract\Database\Query\QueryInterface;
+use Raxos\Contract\Search\{FilterInterface, QueryNodeInterface};
 use Raxos\Search\Attribute\Filter;
-use Raxos\Search\Contract\{FilterInterface, QueryNodeInterface};
 use Raxos\Search\ScoreExpression;
 use RuntimeException;
 

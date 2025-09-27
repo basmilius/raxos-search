@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Error;
 
-use Raxos\Foundation\Error\ExceptionId;
+use Raxos\Contract\Search\SearchExceptionInterface;
+use Raxos\Error\Exception;
 
 /**
  * Class InvalidFilterValueException
@@ -12,7 +13,7 @@ use Raxos\Foundation\Error\ExceptionId;
  * @package Raxos\Search\Error
  * @since 2.0.0
  */
-final class InvalidFilterValueException extends SearchException
+final class InvalidFilterValueException extends Exception implements SearchExceptionInterface
 {
 
     /**
@@ -28,7 +29,6 @@ final class InvalidFilterValueException extends SearchException
     )
     {
         parent::__construct(
-            ExceptionId::guess(),
             'search:invalid_filter_value',
             "Invalid filter value for filter {$this->filterClass}."
         );

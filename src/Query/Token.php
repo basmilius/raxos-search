@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Query;
 
-use Raxos\Foundation\Contract\DebuggableInterface;
+use Raxos\Contract\DebuggableInterface;
 
 /**
  * Class Token

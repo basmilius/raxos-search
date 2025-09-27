@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 namespace Raxos\Search;
 
-use Raxos\Database\Contract\QueryInterface;
-use Raxos\Database\Error\DatabaseException;
+use Raxos\Collection\{ArrayList, Map};
+use Raxos\Contract\Collection\{ArrayListInterface, MapInterface};
+use Raxos\Contract\Database\DatabaseExceptionInterface;
+use Raxos\Contract\Database\Query\QueryInterface;
+use Raxos\Contract\Search\{SearchExceptionInterface, SearchProviderInterface};
 use Raxos\Database\Orm\Model;
 use Raxos\Database\Query\Select;
-use Raxos\Foundation\Collection\{ArrayList, Map};
-use Raxos\Foundation\Contract\{ArrayListInterface, MapInterface};
-use Raxos\Search\Contract\SearchProviderInterface;
 use Raxos\Search\Enum\PolicyVerdict;
-use Raxos\Search\Error\{IllegalSearchException, SearchException};
+use Raxos\Search\Error\IllegalSearchException;
 use Raxos\Search\Query\{Lexer, Parser, Token as T};
 use function array_map;
 use function array_merge;
@@ -81,8 +81,8 @@ final class SearchProvider implements SearchProviderInterface
      * @param int $limit
      *
      * @return Model[]
-     * @throws DatabaseException
-     * @throws SearchException
+     * @throws DatabaseExceptionInterface
+     * @throws SearchExceptionInterface
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
@@ -140,7 +140,7 @@ final class SearchProvider implements SearchProviderInterface
      * @param string $query
      *
      * @return T\Query
-     * @throws SearchException
+     * @throws SearchExceptionInterface
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Query;
 
+use Raxos\Contract\Search\QueryNodeInterface;
 use Raxos\DateTime\Date;
-use Raxos\Search\Contract\QueryNodeInterface;
 use Raxos\Search\Error\{InvalidRangeEndpointException, UnexpectedTokenException};
 use Raxos\Search\Query\Token as T;
 use Raxos\Search\Query\Token\Query;

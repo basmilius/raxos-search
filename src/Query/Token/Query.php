@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Query\Token;
 
-use Raxos\Foundation\Contract\DebuggableInterface;
-use Raxos\Search\Contract\QueryNodeInterface;
+use Raxos\Contract\DebuggableInterface;
+use Raxos\Contract\Search\QueryNodeInterface;
 use Stringable;
 use function array_map;
 use function implode;
