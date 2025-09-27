@@ -63,7 +63,7 @@ final class Lexer
                 continue;
             }
 
-            if ($character === '.' && $this->peekN(2) === '..') {
+            if ($character === '.' && ($this->peekN(2) === '..' || $this->peekN(3) === '...')) {
                 $tokens[] = $this->consumeDots($this->position);
                 continue;
             }
@@ -82,7 +82,7 @@ final class Lexer
                     break;
                 }
 
-                if ($character === '.' && $this->peekN(2) === '..') {
+                if ($character === '.' && ($this->peekN(2) === '..' || $this->peekN(3) === '...')) {
                     break;
                 }
 
