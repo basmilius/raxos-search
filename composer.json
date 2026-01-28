@@ -36,6 +36,7 @@
         "raxos/database": "*",
         "raxos/error": "*",
         "raxos/datetime": "*",
-        "raxos/foundation": "*"
+        "raxos/foundation": "*",
+        "raxos/reflection": "*"
     }
 }

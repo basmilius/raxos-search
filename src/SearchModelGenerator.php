@@ -10,7 +10,7 @@ use Raxos\Database\Orm\Structure\StructureGenerator;
 use Raxos\Search\Attribute\{Filter, Policy, Preset};
 use Raxos\Search\Error\ReflectionErrorException;
 use ReflectionException;
-use function Raxos\Foundation\reflect;
+use function Raxos\Reflection\reflect;
 
 /**
  * Class SearchModelGenerator
