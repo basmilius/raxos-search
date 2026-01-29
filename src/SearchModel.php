@@ -24,7 +24,7 @@ final readonly class SearchModel implements DebuggableInterface
     /**
      * SearchModel constructor.
      *
-     * @param StructureInterface $structure
+     * @param StructureInterface<TModel> $structure
      * @param array<string, Filter> $filters
      * @param PolicyInterface[] $policies
      * @param Preset[] $presets

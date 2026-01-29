@@ -13,7 +13,7 @@ use Raxos\Contract\Database\Query\{QueryExpressionInterface, QueryInterface};
  * @package Raxos\Search
  * @since 2.0.0
  */
-readonly class ScoreExpressions implements QueryExpressionInterface
+final readonly class ScoreExpressions implements QueryExpressionInterface
 {
 
     /**
