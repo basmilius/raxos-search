@@ -53,12 +53,18 @@ final readonly class Enum implements FilterInterface
             throw new InvalidFilterValueException(self::class);
         }
 
+        $enumCase = $this->enum::tryFrom($searchQuery->text);
+
+        if ($enumCase === null) {
+            throw new InvalidFilterValueException(self::class);
+        }
+
         $modelClass = $this->modelClass ?? $structure->class;
         $modelKey = $this->modelKey ?? $attribute->property;
 
         $query->where(
             $modelClass::col($modelKey),
-            $searchQuery->text
+            $enumCase->value
         );
 
         return new ScoreExpression(

@@ -83,7 +83,7 @@ final readonly class Number implements FilterInterface
             $query->where($col, '<=', $to);
 
             return new ScoreExpression(literal(<<<SQL
-                case when {$col} <= {$from} then 40 else 0 end
+                case when {$col} <= {$to} then 40 else 0 end
                 SQL
             ));
         }

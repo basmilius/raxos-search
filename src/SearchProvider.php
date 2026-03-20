@@ -55,7 +55,8 @@ final class SearchProvider implements SearchProviderInterface
         foreach ($searchQuery->nodes as $node) {
             match (true) {
                 $node instanceof T\Field => $filters->set($node->key, $node->value),
-                $node instanceof T\Phrase => $filters->set('q', $node)
+                $node instanceof T\Phrase => $filters->set('q', $node),
+                default => null
             };
         }
 

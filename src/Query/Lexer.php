@@ -192,7 +192,7 @@ final class Lexer
      */
     private function peek(): string
     {
-        return $this->query[$this->position];
+        return mb_substr($this->query, $this->position, 1);
     }
 
     /**

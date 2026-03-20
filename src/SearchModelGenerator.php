@@ -45,19 +45,12 @@ final class SearchModelGenerator
             $presets = [];
 
             foreach ($attributes as $attribute) {
-                switch (true) {
-                    case $attribute instanceof Filter:
-                        $filters[$attribute->property] = $attribute;
-                        break;
-
-                    case $attribute instanceof Policy:
-                        $policies[] = $attribute->policy;
-                        break;
-
-                    case $attribute instanceof Preset:
-                        $presets[] = $attribute;
-                        break;
-                }
+                match (true) {
+                    $attribute instanceof Filter => $filters[$attribute->property] = $attribute,
+                    $attribute instanceof Policy => $policies[] = $attribute->policy,
+                    $attribute instanceof Preset => $presets[] = $attribute,
+                    default => null
+                };
             }
 
             return new SearchModel(

@@ -15,7 +15,7 @@ use Raxos\Contract\Search\{AttributeInterface, PolicyInterface};
  * @package Raxos\Search\Attribute
  * @since 2.0.0
  */
-#[Attribute(Attribute::TARGET_CLASS)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 final readonly class Policy implements AttributeInterface
 {
 
