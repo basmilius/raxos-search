@@ -61,7 +61,8 @@ final class SearchProvider implements SearchProviderInterface
         }
 
         $results = new ArrayList();
-        $rawResults = array_merge(...array_map(fn(SearchModel $model) => $this->searchModel($model, $context, $filters, $limit), array_values($this->models)));
+        $modelResults = array_map(fn(SearchModel $model) => $this->searchModel($model, $context, $filters, $limit), array_values($this->models));
+        $rawResults = !empty($modelResults) ? array_merge(...$modelResults) : [];
 
         foreach ($rawResults as $result) {
             $score = (float)$result->backbone->data->getValue('__score');
