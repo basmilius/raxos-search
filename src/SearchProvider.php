@@ -7,7 +7,7 @@ use Raxos\Collection\{ArrayList, Map};
 use Raxos\Contract\Collection\{ArrayListInterface, MapInterface};
 use Raxos\Contract\Database\DatabaseExceptionInterface;
 use Raxos\Contract\Database\Query\QueryInterface;
-use Raxos\Contract\Search\{SearchExceptionInterface, SearchProviderInterface};
+use Raxos\Contract\Search\{SearchExceptionInterface, SearchProviderInterface, StructuredFilterInterface};
 use Raxos\Database\Orm\Model;
 use Raxos\Database\Query\Select;
 use Raxos\Search\Enum\PolicyVerdict;
@@ -39,6 +39,38 @@ final class SearchProvider implements SearchProviderInterface
     public function registerModel(string $modelClass): void
     {
         $this->models[$modelClass] ??= SearchModelGenerator::generate($modelClass);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @author Bas Milius <bas@mili.us>
+     * @since 2.2.0
+     */
+    public function applyFilters(QueryInterface $query, string $modelClass, MapInterface $params): QueryInterface
+    {
+        $this->registerModel($modelClass);
+        $model = $this->models[$modelClass];
+
+        $database = new DatabaseQuery($query);
+        $database->withModel($modelClass);
+
+        foreach ($model->filters as $property => $filterAttr) {
+            $filter = $filterAttr->filter;
+
+            if (!($filter instanceof StructuredFilterInterface)) {
+                continue;
+            }
+
+            $node = $filter->fromInput($property, $params);
+
+            if ($node === null) {
+                continue;
+            }
+
+            $filter->apply($model->structure, $filterAttr, $database, $node);
+        }
+
+        return $database;
     }
 
     /**

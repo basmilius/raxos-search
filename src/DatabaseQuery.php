@@ -41,6 +41,7 @@ class DatabaseQuery extends Query
 
         if ($connectionOrQuery instanceof QueryInterface) {
             $this->merge($connectionOrQuery);
+            $this->adoptClauseState($connectionOrQuery);
         }
     }
 

@@ -7,34 +7,38 @@ use Raxos\Contract\Collection\MapInterface;
 use Raxos\Contract\Database\Orm\StructureInterface;
 use Raxos\Contract\Database\Query\QueryInterface;
 use Raxos\Contract\Search\{FilterInterface, QueryNodeInterface, StructuredFilterInterface};
-use Raxos\Search\{DatabaseQuery, ScoreExpression};
+use Raxos\Database\Query\Literal\Literal;
 use Raxos\Search\Attribute\Filter;
+use Raxos\Search\Error\InvalidFilterValueException;
 use Raxos\Search\Query\Token as T;
-use const Raxos\Database\Query\expr;
+use Raxos\Search\ScoreExpression;
+use function in_array;
 
 /**
- * Class Some
+ * Class Defined
+ *
+ * Boolean filter over a column's null-ness: a truthy input matches rows where the
+ * column IS NOT NULL, a falsy input matches rows where it IS NULL. Useful for
+ * "was X used?" filters over a nullable foreign key.
  *
  * @author Bas Milius <bas@mili.us>
  * @package Raxos\Search\Filter
- * @since 2.0.0
+ * @since 2.2.0
  */
-final readonly class Some implements FilterInterface, StructuredFilterInterface
+final readonly class Defined implements FilterInterface, StructuredFilterInterface
 {
 
     /**
-     * Some constructor.
+     * Defined constructor.
      *
-     * @param FilterInterface[] $filters
      * @param string|null $modelClass
      * @param string|null $modelKey
      * @param int $weight
      *
      * @author Bas Milius <bas@mili.us>
-     * @since 2.0.0
+     * @since 2.2.0
      */
     public function __construct(
-        public array $filters,
         public ?string $modelClass = null,
         public ?string $modelKey = null,
         public int $weight = 1
@@ -43,29 +47,26 @@ final readonly class Some implements FilterInterface, StructuredFilterInterface
     /**
      * {@inheritdoc}
      * @author Bas Milius <bas@mili.us>
-     * @since 2.0.0
+     * @since 2.2.0
      */
     public function apply(StructureInterface $structure, Filter $attribute, QueryInterface $query, QueryNodeInterface $searchQuery): ScoreExpression
     {
-        /** @var ScoreExpression[] $scoreExpressions */
-        $scoreExpressions = [];
+        if (!($searchQuery instanceof T\Word)) {
+            throw new InvalidFilterValueException(self::class);
+        }
 
-        $query->parenthesis(function () use ($structure, $attribute, $query, $searchQuery, &$scoreExpressions): void {
-            foreach ($this->filters as $index => $filter) {
-                if ($index === 1 && $query instanceof DatabaseQuery) {
-                    $query->convertToOr = true;
-                }
+        $modelClass = $this->modelClass ?? $structure->class;
+        $modelKey = $this->modelKey ?? $attribute->property;
+        $col = $modelClass::col($modelKey);
 
-                $scoreExpressions[] = $filter->apply($structure, $attribute, $query, $searchQuery);
-            }
-        });
-
-        if ($query instanceof DatabaseQuery) {
-            $query->convertToOr = false;
+        if (in_array($searchQuery->text, ['true', '1'], true)) {
+            $query->whereNotNull($col);
+        } else {
+            $query->whereNull($col);
         }
 
         return new ScoreExpression(
-            expression: expr->greatest(...$scoreExpressions),
+            expression: Literal::of(0),
             weight: $this->weight
         );
     }
@@ -87,7 +88,7 @@ final readonly class Some implements FilterInterface, StructuredFilterInterface
             return null;
         }
 
-        return new T\Phrase($value);
+        return new T\Word($value);
     }
 
     /**
@@ -97,7 +98,7 @@ final readonly class Some implements FilterInterface, StructuredFilterInterface
      */
     public function describe(string $property): array
     {
-        return [['name' => $property, 'type' => 'string']];
+        return [['name' => $property, 'type' => 'boolean']];
     }
 
 }

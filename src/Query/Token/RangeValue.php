@@ -20,15 +20,15 @@ final readonly class RangeValue implements QueryNodeInterface, Stringable
     /**
      * RangeValue constructor.
      *
-     * @param DateValue|NumberValue|null $from
-     * @param DateValue|NumberValue|null $to
+     * @param DateValue|DateTimeValue|NumberValue|null $from
+     * @param DateValue|DateTimeValue|NumberValue|null $to
      *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
     public function __construct(
-        public DateValue|NumberValue|null $from,
-        public DateValue|NumberValue|null $to
+        public DateValue|DateTimeValue|NumberValue|null $from,
+        public DateValue|DateTimeValue|NumberValue|null $to
     ) {}
 
     /**
