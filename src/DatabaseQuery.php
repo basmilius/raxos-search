@@ -27,17 +27,15 @@ class DatabaseQuery extends Query
      * DatabaseQuery constructor.
      *
      * @param ConnectionInterface|QueryInterface $connectionOrQuery
-     * @param bool $prepared
      *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    public function __construct(ConnectionInterface|QueryInterface $connectionOrQuery, bool $prepared = false)
+    public function __construct(ConnectionInterface|QueryInterface $connectionOrQuery)
     {
         $connection = $connectionOrQuery instanceof QueryInterface ? $connectionOrQuery->connection : $connectionOrQuery;
-        $prepared = $connectionOrQuery instanceof QueryInterface ? $connectionOrQuery->prepared : $prepared;
 
-        parent::__construct($connection, $prepared);
+        parent::__construct($connection);
 
         if ($connectionOrQuery instanceof QueryInterface) {
             $this->merge($connectionOrQuery);
