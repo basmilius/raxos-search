@@ -6,6 +6,7 @@ namespace Raxos\Search\Filter;
 use Raxos\Contract\Database\Orm\StructureInterface;
 use Raxos\Contract\Database\Query\QueryInterface;
 use Raxos\Contract\Search\{FilterInterface, QueryNodeInterface};
+use Raxos\Database\Query\Expr;
 use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Error\InvalidFilterValueException;
 use Raxos\Search\Query\Token as T;
@@ -13,7 +14,6 @@ use Raxos\Search\ScoreExpression;
 use function abs;
 use function max;
 use function Raxos\Database\Query\literal;
-use const Raxos\Database\Query\expr;
 
 /**
  * Class Number
@@ -57,7 +57,7 @@ final readonly class Number implements FilterInterface
             $to = $searchQuery->to instanceof T\NumberValue ? $searchQuery->to->value : null;
 
             if ($from !== null && $to !== null) {
-                $query->where($col, expr->between($from, $to));
+                $query->where($col, Expr::between($from, $to));
 
                 $midPoint = ($from + $to) / 2;
                 $spread = max(1, abs($to - $from));

@@ -7,11 +7,11 @@ use Raxos\Contract\Database\Orm\StructureInterface;
 use Raxos\Contract\Database\Query\QueryInterface;
 use Raxos\Contract\Search\{FilterInterface, QueryNodeInterface, QueryTextNodeInterface};
 use Raxos\Database\Orm\Model;
+use Raxos\Database\Query\Expr;
 use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Error\InvalidFilterValueException;
 use Raxos\Search\ScoreExpression;
 use function array_map;
-use const Raxos\Database\Query\expr;
 
 /**
  * Class NaturalText
@@ -65,7 +65,7 @@ final readonly class NaturalText implements FilterInterface
             $keys[] = $modelClass::col($modelKey);
         }
 
-        $query->where(expr->matchAgainst(
+        $query->where(Expr::matchAgainst(
             $keys,
             $searchQuery->text,
             $this->booleanMode,
@@ -73,7 +73,7 @@ final readonly class NaturalText implements FilterInterface
         ));
 
         return new ScoreExpression(
-            expression: expr->matchAgainst(
+            expression: Expr::matchAgainst(
                 $keys,
                 $searchQuery->text,
                 $this->booleanMode,

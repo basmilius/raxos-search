@@ -7,10 +7,10 @@ use Raxos\Contract\Collection\MapInterface;
 use Raxos\Contract\Database\Orm\StructureInterface;
 use Raxos\Contract\Database\Query\QueryInterface;
 use Raxos\Contract\Search\{FilterInterface, QueryNodeInterface, StructuredFilterInterface};
+use Raxos\Database\Query\Expr;
 use Raxos\Search\{DatabaseQuery, ScoreExpression};
 use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Query\Token as T;
-use const Raxos\Database\Query\expr;
 
 /**
  * Class Some
@@ -65,7 +65,7 @@ final readonly class Some implements FilterInterface, StructuredFilterInterface
         }
 
         return new ScoreExpression(
-            expression: expr->greatest(...$scoreExpressions),
+            expression: Expr::greatest(...$scoreExpressions),
             weight: $this->weight
         );
     }
