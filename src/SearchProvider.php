@@ -9,7 +9,6 @@ use Raxos\Contract\Database\DatabaseExceptionInterface;
 use Raxos\Contract\Database\Query\QueryInterface;
 use Raxos\Contract\Search\{SearchExceptionInterface, SearchProviderInterface, StructuredFilterInterface};
 use Raxos\Database\Orm\Model;
-use Raxos\Database\Query\Select;
 use Raxos\Search\Enum\PolicyVerdict;
 use Raxos\Search\Error\IllegalSearchException;
 use Raxos\Search\Query\{Lexer, Parser, Token as T};
@@ -157,9 +156,9 @@ final class SearchProvider implements SearchProviderInterface
             return [];
         }
 
-        $query->select(new Select()->add(
-            __score: new ScoreExpressions($scoreExpressions)
-        ));
+        $query->select([
+            '__score' => new ScoreExpressions($scoreExpressions)
+        ]);
 
         return $query
             ->withModel($model->structure->class)
