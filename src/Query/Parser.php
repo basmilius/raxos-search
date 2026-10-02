@@ -76,7 +76,7 @@ final class Parser
         }
 
         if (!empty($text)) {
-            $normalized[] = new T\Phrase(implode(' ', array_map(\strval(...), $text)));
+            $normalized[] = new T\Phrase(implode(' ', array_map(static fn(QueryNodeInterface $node): string => $node instanceof T\Phrase ? $node->text : (string)$node, $text)));
         }
 
         return new T\Query($normalized);

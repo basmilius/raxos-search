@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 namespace Raxos\Search\Query;
 
+use Raxos\Error\InvalidArgumentException;
+use function array_slice;
+use function count;
 use function ctype_space;
-use function mb_strlen;
-use function mb_substr;
+use function implode;
+use function mb_check_encoding;
+use function mb_str_split;
 
 /**
  * Class Lexer
@@ -17,6 +21,17 @@ use function mb_substr;
 final class Lexer
 {
 
+    /**
+     * @var string[]
+     * @author Bas Milius <bas@mili.us>
+     * @since 3.2.0
+     */
+    private readonly array $characters;
+
+    /**
+     * @author Bas Milius <bas@mili.us>
+     * @since 3.2.0
+     */
     private readonly int $length;
     private int $position = 0;
 
@@ -36,7 +51,12 @@ final class Lexer
         public readonly string $query
     )
     {
-        $this->length = mb_strlen($this->query);
+        if (!mb_check_encoding($query, 'UTF-8')) {
+            throw new InvalidArgumentException('Search query must be valid UTF-8.');
+        }
+
+        $this->characters = mb_str_split($query, encoding: 'UTF-8');
+        $this->length = count($this->characters);
     }
 
     /**
@@ -89,7 +109,7 @@ final class Lexer
                 $this->position++;
             }
 
-            $lex = mb_substr($this->query, $position, $this->position - $position);
+            $lex = implode('', array_slice($this->characters, $position, $this->position - $position));
             $tokens[] = new Token(TokenType::WORD, $lex, $position);
         }
 
@@ -180,7 +200,7 @@ final class Lexer
             $this->position++;
         }
 
-        return new Token(TokenType::WHITESPACE, mb_substr($this->query, $position, $this->position - $position), $position);
+        return new Token(TokenType::WHITESPACE, implode('', array_slice($this->characters, $position, $this->position - $position)), $position);
     }
 
     /**
@@ -192,7 +212,7 @@ final class Lexer
      */
     private function peek(): string
     {
-        return mb_substr($this->query, $this->position, 1);
+        return $this->characters[$this->position] ?? '';
     }
 
     /**
@@ -206,7 +226,7 @@ final class Lexer
      */
     private function peekN(int $length): string
     {
-        return mb_substr($this->query, $this->position, $length);
+        return implode('', array_slice($this->characters, $this->position, $length));
     }
 
 }

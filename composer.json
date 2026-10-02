@@ -1,7 +1,7 @@
 {
     "name": "raxos/search",
     "description": "Search provider for Raxos. Uses raxos/database.",
-    "license": "mit",
+    "license": "MIT",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "type": "library",
@@ -19,6 +19,9 @@
     "config": {
         "platform": {
             "php": "8.5"
+        },
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
         }
     },
     "repositories": [
@@ -32,11 +35,24 @@
         "ext-ctype": "*",
         "ext-mbstring": "*",
         "jetbrains/phpstorm-attributes": "^1.2",
+        "php": ">=8.5",
+        "raxos/collection": "*",
         "raxos/contract": "*",
         "raxos/database": "*",
-        "raxos/error": "*",
         "raxos/datetime": "*",
+        "raxos/error": "*",
         "raxos/foundation": "*",
         "raxos/reflection": "*"
+    },
+    "require-dev": {
+        "pestphp/pest": "^5.0"
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/Fixtures/"
+        ]
+    },
+    "scripts": {
+        "test": "pest --compact"
     }
 }
