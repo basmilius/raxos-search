@@ -14,6 +14,7 @@ use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Error\InvalidFilterValueException;
 use Raxos\Search\Query\Token as T;
 use Raxos\Search\ScoreExpression;
+use Stringable;
 use function array_map;
 use function is_int;
 
@@ -86,7 +87,7 @@ final readonly class Enum implements FilterInterface, StructuredFilterInterface
     /**
      * {@inheritdoc}
      * @author Bas Milius <bas@mili.us>
-     * @since 2.2.0
+     * @since 3.2.0
      */
     public function fromInput(string $property, MapInterface $params): ?QueryNodeInterface
     {
@@ -94,7 +95,13 @@ final readonly class Enum implements FilterInterface, StructuredFilterInterface
             return null;
         }
 
-        $value = (string)$params->get($property);
+        $value = $params->get($property);
+
+        if ($value !== null && !is_scalar($value) && !($value instanceof Stringable)) {
+            throw new InvalidFilterValueException(self::class);
+        }
+
+        $value = (string)$value;
 
         if ($value === '') {
             return null;

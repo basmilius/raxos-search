@@ -227,13 +227,14 @@ final class Parser
      * @throws InvalidRangeEndpointException
      * @throws UnexpectedTokenException
      * @author Bas Milius <bas@mili.us>
-     * @since 2.0.0
+     * @since 3.2.0
      */
     private function parsePart(): QueryNodeInterface
     {
         // Look for a field "key:value"
         if ($this->peekIs(TokenType::WORD) && $this->peekAheadIsColon()) {
             $key = mb_strtolower($this->consume(TokenType::WORD)->lexeme);
+            $this->skipWhitespace();
 
             $this->consume(TokenType::COLON);
             $this->skipWhitespace();

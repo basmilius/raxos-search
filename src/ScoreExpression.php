@@ -35,12 +35,13 @@ final readonly class ScoreExpression implements QueryExpressionInterface
     /**
      * {@inheritdoc}
      * @author Bas Milius <bas@mili.us>
-     * @since 2.0.0
+     * @since 3.2.0
      */
     public function compile(QueryInterface $query, ConnectionInterface $connection, GrammarInterface $grammar): void
     {
+        $query->raw('(');
         $query->compile($this->expression);
-        $query->raw("* {$this->weight}");
+        $query->raw(") * {$this->weight}");
     }
 
 }

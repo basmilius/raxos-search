@@ -12,6 +12,7 @@ use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Error\InvalidFilterValueException;
 use Raxos\Search\Query\Token as T;
 use Raxos\Search\ScoreExpression;
+use Stringable;
 use function in_array;
 
 /**
@@ -68,7 +69,7 @@ final readonly class Boolean implements FilterInterface, StructuredFilterInterfa
     /**
      * {@inheritdoc}
      * @author Bas Milius <bas@mili.us>
-     * @since 2.2.0
+     * @since 3.2.0
      */
     public function fromInput(string $property, MapInterface $params): ?QueryNodeInterface
     {
@@ -76,7 +77,13 @@ final readonly class Boolean implements FilterInterface, StructuredFilterInterfa
             return null;
         }
 
-        $value = (string)$params->get($property);
+        $value = $params->get($property);
+
+        if ($value !== null && !is_scalar($value) && !($value instanceof Stringable)) {
+            throw new InvalidFilterValueException(self::class);
+        }
+
+        $value = is_bool($value) ? ($value ? 'true' : 'false') : (string)$value;
 
         if ($value === '') {
             return null;

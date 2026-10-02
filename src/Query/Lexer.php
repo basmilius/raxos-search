@@ -141,11 +141,11 @@ final class Lexer
      *
      * @return Token
      * @author Bas Milius <bas@mili.us>
-     * @since 2.0.0
+     * @since 3.2.0
      */
     private function consumeDots(int $position): Token
     {
-        $this->position += 2;
+        $this->position += $this->peekN(3) === '...' ? 3 : 2;
 
         return new Token(TokenType::DOTS, '..', $position);
     }

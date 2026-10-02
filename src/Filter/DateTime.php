@@ -13,7 +13,9 @@ use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Error\InvalidFilterValueException;
 use Raxos\Search\Query\Token as T;
 use Raxos\Search\ScoreExpression;
+use Stringable;
 use Throwable;
+use function is_scalar;
 
 /**
  * Class DateTime
@@ -44,11 +46,14 @@ final readonly class DateTime implements FilterInterface, StructuredFilterInterf
     /**
      * {@inheritdoc}
      * @author Bas Milius <bas@mili.us>
-     * @since 2.0.0
+     * @since 3.2.0
      */
     public function apply(StructureInterface $structure, Filter $attribute, QueryInterface $query, QueryNodeInterface $searchQuery): ScoreExpression
     {
-        if (!($searchQuery instanceof T\RangeValue)) {
+        if (!($searchQuery instanceof T\RangeValue)
+            || ($searchQuery->from === null && $searchQuery->to === null)
+            || ($searchQuery->from !== null && !($searchQuery->from instanceof T\DateValue || $searchQuery->from instanceof T\DateTimeValue))
+            || ($searchQuery->to !== null && !($searchQuery->to instanceof T\DateValue || $searchQuery->to instanceof T\DateTimeValue))) {
             throw new InvalidFilterValueException(self::class);
         }
 
@@ -74,12 +79,19 @@ final readonly class DateTime implements FilterInterface, StructuredFilterInterf
      * {@inheritdoc}
      * @throws InvalidFilterValueException
      * @author Bas Milius <bas@mili.us>
-     * @since 2.2.0
+     * @since 3.2.0
      */
     public function fromInput(string $property, MapInterface $params): ?QueryNodeInterface
     {
         $afterKey = $property . '_after';
         $beforeKey = $property . '_before';
+
+        foreach ([$afterKey, $beforeKey] as $key) {
+            $value = $params->get($key);
+            if ($value !== null && !is_scalar($value) && !($value instanceof Stringable)) {
+                throw new InvalidFilterValueException(self::class);
+            }
+        }
 
         $after = $params->has($afterKey) ? (string)$params->get($afterKey) : '';
         $before = $params->has($beforeKey) ? (string)$params->get($beforeKey) : '';

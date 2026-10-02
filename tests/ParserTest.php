@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 use Raxos\Collection\Map;
 use Raxos\Search\Filter\Exact;
-use Raxos\Search\Query\Token\{Field, NumberValue, Phrase, RangeValue};
 use Raxos\Search\Query\{Lexer, Parser};
+use Raxos\Search\Query\Token\{Field, NumberValue, Phrase, RangeValue};
+
+covers(Parser::class);
 
 it('parses signed numeric ranges with open and closed endpoints', function (string $input, int|float|null $from, int|float|null $to): void {
     $query = new Parser(new Lexer($input)->tokenize())->parse();
@@ -28,4 +30,29 @@ it('keeps zero-valued structured filter inputs and omits missing or empty ones',
         ->and($filter->fromInput('key', new Map(['key' => ''])))->toBeNull()
         ->and($filter->fromInput('key', new Map()))->toBeNull()
         ->and($filter->describe('key'))->toBe([['name' => 'key', 'type' => 'string']]);
+});
+
+it('accepts whitespace before field separators and preserves quoted and multiword field values', function (): void {
+    $nodes = new Parser(new Lexer('Title : blue sky next: "hello world" empty:')->tokenize())->parse()->nodes;
+    expect($nodes)->toHaveCount(3)->and($nodes[0]->key)->toBe('title')->and($nodes[0]->value)->toBeInstanceOf(Raxos\Search\Query\Token\Words::class)
+        ->and((string)$nodes[0]->value)->toBe('blue sky')->and($nodes[1]->value->text)->toBe('hello world')->and($nodes[2]->value)->toBeNull();
+});
+
+it('parses signed numbers and calendar dates with open or closed ranges', function (string $input, ?string $from, ?string $to): void {
+    $node = new Parser(new Lexer($input)->tokenize())->parse()->nodes[0]->value;
+    expect($node->from === null ? null : (string)$node->from)->toBe($from)->and($node->to === null ? null : (string)$node->to)->toBe($to);
+})->with([
+    ['created:2026-01-01..2026-01-03', '2026-01-01', '2026-01-03'],
+    ['created:..2026-01-03', null, '2026-01-03'], ['quantity:+2.5..+3.5', '2.5', '3.5'],
+    ['quantity:1...3', '1', '3'],
+]);
+
+it('rejects unexpected syntax instead of consuming it as a valid word', function (string $input): void {
+    expect(fn () => new Parser(new Lexer($input)->tokenize())->parse())->toThrow(Raxos\Search\Error\UnexpectedTokenException::class);
+})->with([':', '..']);
+
+it('normalizes free text before and after filters while keeping field values typed', function (): void {
+    $nodes = new Parser(new Lexer('hello quantity:2 "wide world" created:2026-01-01')->tokenize())->parse()->nodes;
+    expect($nodes)->toHaveCount(3)->and($nodes[0]->value->value)->toBe(2)
+        ->and((string)$nodes[1]->value)->toBe('2026-01-01')->and($nodes[2]->text)->toBe('hello wide world');
 });
