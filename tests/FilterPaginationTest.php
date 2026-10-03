@@ -38,7 +38,7 @@ afterEach(function (): void {
     }
 });
 
-it('paginates filtered model views through the Passly search and visibility path', function (string $driver): void {
+it('paginates filtered model views through search and visibility callbacks', function (string $driver): void {
     $this->connection = searchTestConnection($driver);
     $original = SearchProduct::select()->orderBy(SearchProduct::col('id'));
     $sql = $original->toSql();
