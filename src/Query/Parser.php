@@ -44,9 +44,7 @@ final class Parser
      */
     public function __construct(
         public readonly array $tokens
-    )
-    {
-    }
+    ) {}
 
     /**
      * Parses the node into the search query structure.

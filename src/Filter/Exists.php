@@ -45,6 +45,7 @@ final readonly class Exists implements FilterInterface, StructuredFilterInterfac
      * @param string|null $matchKey
      * @param class-string<Model>|null $modelClass
      * @param int $weight
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.2.0
      */
@@ -56,9 +57,7 @@ final readonly class Exists implements FilterInterface, StructuredFilterInterfac
         public ?string $modelClass = null,
         public ?string $modelKey = null,
         public int $weight = 1
-    )
-    {
-    }
+    ) {}
 
     /**
      * {@inheritdoc}

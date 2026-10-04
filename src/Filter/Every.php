@@ -41,9 +41,7 @@ final readonly class Every implements FilterInterface
         public ?string $modelClass = null,
         public ?string $modelKey = null,
         public int $weight = 0
-    )
-    {
-    }
+    ) {}
 
     /**
      * {@inheritdoc}

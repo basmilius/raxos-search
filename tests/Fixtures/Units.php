@@ -23,6 +23,7 @@ enum UnitSearchState: string
     case Blue = 'blue';
     case Red = 'red';
 }
+
 enum UnitSearchCode: int
 {
     case First = 1;
@@ -31,26 +32,26 @@ enum UnitSearchCode: int
 
 final readonly class UnitScoreFilter implements FilterInterface
 {
-    public function __construct(public ?string $modelClass = null, public ?string $modelKey = null, public int $weight = 1)
-    {
-    }
+    public function __construct(public ?string $modelClass = null, public ?string $modelKey = null, public int $weight = 1) {}
+
     public function apply(StructureInterface $structure, Filter $attribute, QueryInterface $query, QueryNodeInterface $searchQuery): ScoreExpression
     {
         $query->where($structure->class::col('quantity'), '>', 0);
+
         return new ScoreExpression($structure->class::col('quantity'));
     }
 }
 
 final readonly class UnitPolicy implements PolicyInterface
 {
-    public function __construct(public PolicyVerdict $verdict = PolicyVerdict::ALLOW)
-    {
-    }
+    public function __construct(public PolicyVerdict $verdict = PolicyVerdict::ALLOW) {}
+
     public function apply(StructureInterface $structure, QueryInterface $query, MapInterface $context): PolicyDecision
     {
         if ($context->has('group')) {
             $query->where($structure->class::col('group_id'), $context->get('group'));
         }
+
         return match ($this->verdict) {
             PolicyVerdict::ALLOW => PolicyDecision::allow(),
             PolicyVerdict::DENY => PolicyDecision::deny('Unit denial'),
@@ -67,35 +68,41 @@ final readonly class UnitPolicy implements PolicyInterface
 #[Preset('first', ['group' => '1'])]
 class UnitSearchProduct extends Model
 {
-    #[PrimaryKey] public int $id;
-    #[Column] public string $title;
-    #[Column] public int $group_id;
-    #[Column] public int $quantity;
-    #[Column] public bool $enabled;
-    #[Column] public ?string $tag;
-    #[Column] public string $created_at;
+    #[PrimaryKey]
+    public int $id;
+    #[Column]
+    public string $title;
+    #[Column]
+    public int $group_id;
+    #[Column]
+    public int $quantity;
+    #[Column]
+    public bool $enabled;
+    #[Column]
+    public ?string $tag;
+    #[Column]
+    public string $created_at;
 }
 
 #[Table('raxos_unit_search')]
 #[Filter('q', new Text(modelKey: 'title'))]
 #[Policy(new UnitPolicy(PolicyVerdict::DENY))]
-final class DeniedSearchProduct extends UnitSearchProduct
-{
-}
+final class DeniedSearchProduct extends UnitSearchProduct {}
 
 #[Table('raxos_unit_search')]
 #[Filter('q', new Text(modelKey: 'title'))]
 #[Policy(new UnitPolicy(PolicyVerdict::DENY_SILENT))]
-final class SilentSearchProduct extends UnitSearchProduct
-{
-}
+final class SilentSearchProduct extends UnitSearchProduct {}
 
 #[Table('raxos_unit_tags')]
 final class UnitSearchTag extends Model
 {
-    #[PrimaryKey] public int $id;
-    #[Column] public int $product_id;
-    #[Column] public string $state;
+    #[PrimaryKey]
+    public int $id;
+    #[Column]
+    public int $product_id;
+    #[Column]
+    public string $state;
 }
 
 function searchUnitContext(): array
@@ -109,5 +116,6 @@ function searchUnitContext(): array
     $connection->pdo->exec("INSERT INTO raxos_unit_tags VALUES (1,1,'blue'),(2,2,'red')");
     $structure = StructureGenerator::for(UnitSearchProduct::class);
     $query = new DatabaseQuery($connection)->select(['id'])->from(UnitSearchProduct::table())->orderBy('id');
+
     return [$connection, $structure, $query];
 }

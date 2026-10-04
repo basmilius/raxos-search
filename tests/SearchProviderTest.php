@@ -25,10 +25,10 @@ it('searches text and explicit fields and ranks numeric scores with the selected
     $text = $provider->search('"apple"');
     expect($text)->toHaveCount(1)->and($text[0]->model->id)->toBe(1)->and($text[0]->score)->toBe(0.0);
     $rank = $provider->search('rank:any', limit: 2);
-    expect(array_map(static fn ($result): int => $result->model->id, $rank->toArray()))->toBe([3, 2])
+    expect(array_map(static fn($result): int => $result->model->id, $rank->toArray()))->toBe([3, 2])
         ->and(array_column($rank->toArray(), 'score'))->toBe([30.0, 20.0]);
     $restricted = $provider->search('rank:any', context: new Map(['group' => 1]));
-    expect(array_map(static fn ($result): int => $result->model->id, $restricted->toArray()))->toBe([2, 1]);
+    expect(array_map(static fn($result): int => $result->model->id, $restricted->toArray()))->toBe([2, 1]);
 });
 
 it('enforces explicit and silent policy denials before returning models', function (bool $silent): void {
@@ -38,6 +38,6 @@ it('enforces explicit and silent policy denials before returning models', functi
     if ($silent) {
         expect($provider->search('"apple"')->toArray())->toBe([]);
     } else {
-        expect(fn () => $provider->search('"apple"'))->toThrow(IllegalSearchException::class, 'Unit denial');
+        expect(fn() => $provider->search('"apple"'))->toThrow(IllegalSearchException::class, 'Unit denial');
     }
 })->with([true, false]);

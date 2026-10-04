@@ -48,7 +48,7 @@ it('parses signed numbers and calendar dates with open or closed ranges', functi
 ]);
 
 it('rejects unexpected syntax instead of consuming it as a valid word', function (string $input): void {
-    expect(fn () => new Parser(new Lexer($input)->tokenize())->parse())->toThrow(Raxos\Search\Error\UnexpectedTokenException::class);
+    expect(fn() => new Parser(new Lexer($input)->tokenize())->parse())->toThrow(Raxos\Search\Error\UnexpectedTokenException::class);
 })->with([':', '..']);
 
 it('normalizes free text before and after filters while keeping field values typed', function (): void {

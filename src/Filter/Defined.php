@@ -44,9 +44,7 @@ final readonly class Defined implements FilterInterface, StructuredFilterInterfa
         public ?string $modelClass = null,
         public ?string $modelKey = null,
         public int $weight = 1
-    )
-    {
-    }
+    ) {}
 
     /**
      * {@inheritdoc}

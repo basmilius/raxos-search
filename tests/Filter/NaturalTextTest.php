@@ -14,14 +14,14 @@ it('compiles fulltext matching with explicit keys or the attribute column fallba
     $filter = new NaturalText($keys, $boolean, modelKey: 'title', weight: 4);
     $score = $filter->apply($structure, new Filter('text', $filter), $query, new Phrase('apple'));
     expect(strtolower($query->toSql()))->toContain('match', 'against')->and($score->weight)->toBe(4);
-    expect(fn () => $filter->apply($structure, new Filter('text', $filter), $query, new NumberValue(1)))->toThrow(InvalidFilterValueException::class);
+    expect(fn() => $filter->apply($structure, new Filter('text', $filter), $query, new NumberValue(1)))->toThrow(InvalidFilterValueException::class);
 })->with([[[], false], [['title'], true]]);
 
 it('executes fulltext matches and weighted scores on both supported native engines', function (string $driver, bool $boolean, bool $expansion): void {
     $variable = $driver === 'mysql' ? 'RAXOS_MYSQL_DSN' : 'RAXOS_MARIADB_DSN';
     $dsn = getenv($variable);
     if (!$dsn) {
-        $this->markTestSkipped($variable.' is not configured.');
+        $this->markTestSkipped($variable . ' is not configured.');
     }
     $class = $driver === 'mysql' ? Raxos\Database\Connection\MySql::class : Raxos\Database\Connection\MariaDb::class;
     $connection = new $class($dsn, getenv('RAXOS_MYSQL_USER') ?: 'root', getenv('RAXOS_MYSQL_PASSWORD') ?: '');

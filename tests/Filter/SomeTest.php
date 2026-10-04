@@ -23,7 +23,7 @@ it('groups child predicates with OR and restores the original query mode', funct
 it('restores the query mode even when a child filter fails', function (): void {
     [, $structure, $query] = searchUnitContext();
     $filter = new Some([new Exact(modelKey: 'id'), new Raxos\Search\Filter\Enum(RaxosTests\Search\UnitSearchState::class)]);
-    expect(fn () => $filter->apply($structure, new Filter('field', $filter), $query, new Word('invalid')))->toThrow(InvalidFilterValueException::class);
+    expect(fn() => $filter->apply($structure, new Filter('field', $filter), $query, new Word('invalid')))->toThrow(InvalidFilterValueException::class);
     expect($query->convertToOr)->toBeFalse();
 });
 
@@ -31,7 +31,7 @@ it('restores the query mode even when a child filter fails', function (): void {
 it('rejects compound structured input without PHP conversion warnings', function (): void {
     $filter = new Some([]);
     foreach ([[], ['bad'], new stdClass()] as $input) {
-        expect(fn () => $filter->fromInput('field', new Map(['field' => $input])))->toThrow(InvalidFilterValueException::class);
+        expect(fn() => $filter->fromInput('field', new Map(['field' => $input])))->toThrow(InvalidFilterValueException::class);
     }
 });
 

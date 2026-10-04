@@ -27,13 +27,13 @@ it('describes its structured input and distinguishes missing, empty and zero val
 it('rejects incompatible query nodes before executing SQL', function (): void {
     [, $structure, $query] = searchUnitContext();
     $filter = new Exact(modelKey: 'group_id');
-    expect(fn () => $filter->apply($structure, new Filter('field', $filter), $query, new NumberValue(1)))->toThrow(InvalidFilterValueException::class);
+    expect(fn() => $filter->apply($structure, new Filter('field', $filter), $query, new NumberValue(1)))->toThrow(InvalidFilterValueException::class);
 });
 
 
 it('rejects compound structured input without PHP conversion warnings', function (): void {
     $filter = new Exact();
     foreach ([[], ['bad'], new stdClass()] as $input) {
-        expect(fn () => $filter->fromInput('field', new Map(['field' => $input])))->toThrow(InvalidFilterValueException::class);
+        expect(fn() => $filter->fromInput('field', new Map(['field' => $input])))->toThrow(InvalidFilterValueException::class);
     }
 });

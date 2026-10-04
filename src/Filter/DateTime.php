@@ -42,9 +42,7 @@ final readonly class DateTime implements FilterInterface, StructuredFilterInterf
         public ?string $modelClass = null,
         public ?string $modelKey = null,
         public int $weight = 1
-    )
-    {
-    }
+    ) {}
 
     /**
      * {@inheritdoc}

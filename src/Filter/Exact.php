@@ -41,9 +41,7 @@ final readonly class Exact implements FilterInterface, StructuredFilterInterface
         public ?string $modelClass = null,
         public ?string $modelKey = null,
         public int $weight = 1
-    )
-    {
-    }
+    ) {}
 
     /**
      * {@inheritdoc}

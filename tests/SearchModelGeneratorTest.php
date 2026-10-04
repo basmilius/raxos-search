@@ -16,5 +16,5 @@ it('collects filters by external key and preserves declared policy and preset me
 });
 
 it('wraps missing model reflection failures', function (): void {
-    expect(fn () => SearchModelGenerator::generate('MissingUnitSearchModel'))->toThrow(ReflectionErrorException::class);
+    expect(fn() => SearchModelGenerator::generate('MissingUnitSearchModel'))->toThrow(ReflectionErrorException::class);
 });

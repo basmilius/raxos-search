@@ -22,5 +22,5 @@ it('filters text through bound SQL values and preserves its weight', function ()
 it('rejects numeric nodes instead of casting them into text', function (): void {
     [, $structure, $query] = searchUnitContext();
     $filter = new Text();
-    expect(fn () => $filter->apply($structure, new Filter('title', $filter), $query, new NumberValue(1)))->toThrow(InvalidFilterValueException::class);
+    expect(fn() => $filter->apply($structure, new Filter('title', $filter), $query, new NumberValue(1)))->toThrow(InvalidFilterValueException::class);
 });

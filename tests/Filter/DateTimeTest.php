@@ -27,21 +27,21 @@ it('describes both endpoints and rejects invalid date strings or nodes', functio
     expect($filter->fromInput('created', new Map()))->toBeNull()->and($filter->describe('created'))->toBe([
         ['name' => 'created_after', 'type' => 'string', 'format' => 'date-time'], ['name' => 'created_before', 'type' => 'string', 'format' => 'date-time'],
     ]);
-    expect(fn () => $filter->fromInput('created', new Map(['created_after' => 'not a date'])))->toThrow(InvalidFilterValueException::class);
+    expect(fn() => $filter->fromInput('created', new Map(['created_after' => 'not a date'])))->toThrow(InvalidFilterValueException::class);
     [, $structure, $query] = searchUnitContext();
-    expect(fn () => $filter->apply($structure, new Filter('created_at', $filter), $query, new Word('invalid')))->toThrow(InvalidFilterValueException::class);
+    expect(fn() => $filter->apply($structure, new Filter('created_at', $filter), $query, new Word('invalid')))->toThrow(InvalidFilterValueException::class);
 });
 
 it('rejects non-scalar endpoints and invalid date range nodes before modifying SQL', function (mixed $value): void {
     $filter = new DateTime();
-    expect(fn () => $filter->fromInput('created', new Map(['created_after' => $value])))->toThrow(InvalidFilterValueException::class);
+    expect(fn() => $filter->fromInput('created', new Map(['created_after' => $value])))->toThrow(InvalidFilterValueException::class);
 })->with([[[]], [new stdClass()]]);
 
 it('rejects empty or non-date range endpoints before adding either bound', function (Raxos\Search\Query\Token\RangeValue $range): void {
     [, $structure, $query] = searchUnitContext();
     $sql = $query->toSql();
     $filter = new DateTime(modelKey: 'created_at');
-    expect(fn () => $filter->apply($structure, new Filter('created', $filter), $query, $range))->toThrow(InvalidFilterValueException::class);
+    expect(fn() => $filter->apply($structure, new Filter('created', $filter), $query, $range))->toThrow(InvalidFilterValueException::class);
     expect($query->toSql())->toBe($sql);
 })->with([
     [new Raxos\Search\Query\Token\RangeValue(null, null)],

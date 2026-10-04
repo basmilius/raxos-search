@@ -27,14 +27,14 @@ it('describes its structured input and distinguishes missing, empty and zero val
 it('rejects incompatible query nodes before executing SQL', function (): void {
     [, $structure, $query] = searchUnitContext();
     $filter = new Defined(modelKey: 'tag');
-    expect(fn () => $filter->apply($structure, new Filter('field', $filter), $query, new NumberValue(1)))->toThrow(InvalidFilterValueException::class);
+    expect(fn() => $filter->apply($structure, new Filter('field', $filter), $query, new NumberValue(1)))->toThrow(InvalidFilterValueException::class);
 });
 
 
 it('rejects compound structured input without PHP conversion warnings', function (): void {
     $filter = new Defined();
     foreach ([[], ['bad'], new stdClass()] as $input) {
-        expect(fn () => $filter->fromInput('field', new Map(['field' => $input])))->toThrow(InvalidFilterValueException::class);
+        expect(fn() => $filter->fromInput('field', new Map(['field' => $input])))->toThrow(InvalidFilterValueException::class);
     }
 });
 

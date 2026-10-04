@@ -29,6 +29,7 @@ function searchTestConnection(string $driver): MariaDb|MySql|SQLite
     $connection->pdo->exec('DROP TABLE IF EXISTS raxos_test_search_products');
     $connection->pdo->exec('CREATE TABLE raxos_test_search_products (id INTEGER PRIMARY KEY, group_id INTEGER NOT NULL, quantity INTEGER NOT NULL, deleted_at VARCHAR(30) NULL)');
     $connection->pdo->exec("INSERT INTO raxos_test_search_products VALUES (1,1,1,NULL),(2,1,3,NULL),(3,2,5,NULL),(4,1,7,'2026-01-01')");
+
     return $connection;
 }
 

@@ -25,7 +25,7 @@ it('rejects incompatible values and ranges without numeric endpoints', function 
     [, $structure, $query] = searchUnitContext();
     $filter = new Number(modelKey: 'quantity');
     foreach ([new Word('invalid'), new RangeValue(null, null)] as $node) {
-        expect(fn () => $filter->apply($structure, new Filter('quantity', $filter), $query, $node))->toThrow(InvalidFilterValueException::class);
+        expect(fn() => $filter->apply($structure, new Filter('quantity', $filter), $query, $node))->toThrow(InvalidFilterValueException::class);
     }
 });
 
@@ -50,6 +50,6 @@ it('rejects non-finite numeric values before emitting SQL', function (float $val
     [, $structure, $query] = RaxosTests\Search\searchUnitContext();
     $sql = $query->toSql();
     $filter = new Raxos\Search\Filter\Number(modelKey: 'quantity');
-    expect(fn () => $filter->apply($structure, new Raxos\Search\Attribute\Filter('quantity', $filter), $query, new Raxos\Search\Query\Token\NumberValue($value)))->toThrow(Raxos\Search\Error\InvalidFilterValueException::class);
+    expect(fn() => $filter->apply($structure, new Raxos\Search\Attribute\Filter('quantity', $filter), $query, new Raxos\Search\Query\Token\NumberValue($value)))->toThrow(Raxos\Search\Error\InvalidFilterValueException::class);
     expect($query->toSql())->toBe($sql);
 })->with([INF, -INF, NAN]);

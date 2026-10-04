@@ -9,6 +9,8 @@ use Raxos\Database\Orm\Model;
 #[Table('raxos_unit_fulltext')]
 final class UnitFullText extends Model
 {
-    #[PrimaryKey] public int $id;
-    #[Column] public string $title;
+    #[PrimaryKey]
+    public int $id;
+    #[Column]
+    public string $title;
 }

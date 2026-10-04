@@ -30,7 +30,7 @@ it('rejects unknown values and wrong node types before adding predicates', funct
     [, $structure, $query] = searchUnitContext();
     $filter = new Enum(UnitSearchState::class);
     foreach ([new Word('missing'), new NumberValue(1)] as $node) {
-        expect(fn () => $filter->apply($structure, new Filter('tag', $filter), $query, $node))->toThrow(InvalidFilterValueException::class);
+        expect(fn() => $filter->apply($structure, new Filter('tag', $filter), $query, $node))->toThrow(InvalidFilterValueException::class);
     }
 });
 
@@ -38,6 +38,6 @@ it('rejects unknown values and wrong node types before adding predicates', funct
 it('rejects compound structured input without PHP conversion warnings', function (): void {
     $filter = new Enum(RaxosTests\Search\UnitSearchState::class);
     foreach ([[], ['bad'], new stdClass()] as $input) {
-        expect(fn () => $filter->fromInput('field', new Map(['field' => $input])))->toThrow(InvalidFilterValueException::class);
+        expect(fn() => $filter->fromInput('field', new Map(['field' => $input])))->toThrow(InvalidFilterValueException::class);
     }
 });

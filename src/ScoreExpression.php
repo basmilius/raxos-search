@@ -34,9 +34,7 @@ final readonly class ScoreExpression implements QueryExpressionInterface
         public QueryLiteralInterface|QueryExpressionInterface $expression,
         public array $params = [],
         public int $weight = 1
-    )
-    {
-    }
+    ) {}
 
     /**
      * {@inheritdoc}
