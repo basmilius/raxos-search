@@ -6,7 +6,9 @@ namespace Raxos\Search\Filter;
 use Raxos\Contract\Collection\MapInterface;
 use Raxos\Contract\Database\Orm\StructureInterface;
 use Raxos\Contract\Database\Query\QueryInterface;
-use Raxos\Contract\Search\{FilterInterface, QueryNodeInterface, StructuredFilterInterface};
+use Raxos\Contract\Search\FilterInterface;
+use Raxos\Contract\Search\QueryNodeInterface;
+use Raxos\Contract\Search\StructuredFilterInterface;
 use Raxos\Database\Query\Literal\Literal;
 use Raxos\DateTime\DateTime as DateTimeUtil;
 use Raxos\Search\Attribute\Filter;
@@ -26,7 +28,6 @@ use function is_scalar;
  */
 final readonly class DateTime implements FilterInterface, StructuredFilterInterface
 {
-
     /**
      * DateTime constructor.
      *
@@ -41,14 +42,21 @@ final readonly class DateTime implements FilterInterface, StructuredFilterInterf
         public ?string $modelClass = null,
         public ?string $modelKey = null,
         public int $weight = 1
-    ) {}
+    )
+    {
+    }
 
     /**
      * {@inheritdoc}
      * @author Bas Milius <bas@mili.us>
-     * @since 3.2.0
+     * @since 2.0.0
      */
-    public function apply(StructureInterface $structure, Filter $attribute, QueryInterface $query, QueryNodeInterface $searchQuery): ScoreExpression
+    public function apply(
+        StructureInterface $structure,
+        Filter $attribute,
+        QueryInterface $query,
+        QueryNodeInterface $searchQuery
+    ): ScoreExpression
     {
         if (!($searchQuery instanceof T\RangeValue)
             || ($searchQuery->from === null && $searchQuery->to === null)
@@ -79,15 +87,19 @@ final readonly class DateTime implements FilterInterface, StructuredFilterInterf
      * {@inheritdoc}
      * @throws InvalidFilterValueException
      * @author Bas Milius <bas@mili.us>
-     * @since 3.2.0
+     * @since 2.2.0
      */
-    public function fromInput(string $property, MapInterface $params): ?QueryNodeInterface
+    public function fromInput(
+        string $property,
+        MapInterface $params
+    ): ?QueryNodeInterface
     {
         $afterKey = $property . '_after';
         $beforeKey = $property . '_before';
 
         foreach ([$afterKey, $beforeKey] as $key) {
             $value = $params->get($key);
+
             if ($value !== null && !is_scalar($value) && !($value instanceof Stringable)) {
                 throw new InvalidFilterValueException(self::class);
             }
@@ -122,5 +134,4 @@ final readonly class DateTime implements FilterInterface, StructuredFilterInterf
             ['name' => $property . '_before', 'type' => 'string', 'format' => 'date-time']
         ];
     }
-
 }

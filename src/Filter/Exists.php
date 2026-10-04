@@ -7,7 +7,10 @@ use BackedEnum;
 use Raxos\Contract\Collection\MapInterface;
 use Raxos\Contract\Database\Orm\StructureInterface;
 use Raxos\Contract\Database\Query\QueryInterface;
-use Raxos\Contract\Search\{FilterInterface, QueryNodeInterface, QueryTextNodeInterface, StructuredFilterInterface};
+use Raxos\Contract\Search\FilterInterface;
+use Raxos\Contract\Search\QueryNodeInterface;
+use Raxos\Contract\Search\QueryTextNodeInterface;
+use Raxos\Contract\Search\StructuredFilterInterface;
 use Raxos\Database\Db;
 use Raxos\Database\Orm\Model;
 use Raxos\Database\Query\Literal\Literal;
@@ -30,7 +33,6 @@ use function Raxos\Database\Query\literal;
  */
 final readonly class Exists implements FilterInterface, StructuredFilterInterface
 {
-
     /**
      * Exists constructor.
      *
@@ -40,13 +42,9 @@ final readonly class Exists implements FilterInterface, StructuredFilterInterfac
      * related table (optionally validated against {@see self::$enum}).
      *
      * @param class-string<Model> $relation
-     * @param array<string, string> $on relation-column => model-column correlation
      * @param string|null $matchKey
-     * @param class-string<BackedEnum>|null $enum
      * @param class-string<Model>|null $modelClass
-     * @param string|null $modelKey
      * @param int $weight
-     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.2.0
      */
@@ -58,14 +56,21 @@ final readonly class Exists implements FilterInterface, StructuredFilterInterfac
         public ?string $modelClass = null,
         public ?string $modelKey = null,
         public int $weight = 1
-    ) {}
+    )
+    {
+    }
 
     /**
      * {@inheritdoc}
      * @author Bas Milius <bas@mili.us>
      * @since 2.2.0
      */
-    public function apply(StructureInterface $structure, Filter $attribute, QueryInterface $query, QueryNodeInterface $searchQuery): ScoreExpression
+    public function apply(
+        StructureInterface $structure,
+        Filter $attribute,
+        QueryInterface $query,
+        QueryNodeInterface $searchQuery
+    ): ScoreExpression
     {
         $modelClass = $this->modelClass ?? $structure->class;
 
@@ -90,6 +95,7 @@ final readonly class Exists implements FilterInterface, StructuredFilterInterfac
                 foreach ($this->enum::cases() as $enumCase) {
                     if ((string)$enumCase->value === $value) {
                         $case = $enumCase;
+
                         break;
                     }
                 }
@@ -127,9 +133,12 @@ final readonly class Exists implements FilterInterface, StructuredFilterInterfac
     /**
      * {@inheritdoc}
      * @author Bas Milius <bas@mili.us>
-     * @since 3.2.0
+     * @since 2.2.0
      */
-    public function fromInput(string $property, MapInterface $params): ?QueryNodeInterface
+    public function fromInput(
+        string $property,
+        MapInterface $params
+    ): ?QueryNodeInterface
     {
         if (!$params->has($property)) {
             return null;
@@ -166,5 +175,4 @@ final readonly class Exists implements FilterInterface, StructuredFilterInterfac
 
         return [['name' => $property, 'type' => $this->matchKey !== null ? 'string' : 'boolean']];
     }
-
 }

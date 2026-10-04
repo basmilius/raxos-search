@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Raxos\Search\Enum;
 
 /**
- * Class PolicyVerdict
+ * Enum PolicyVerdict
  *
  * @author Bas Milius <bas@mili.us>
  * @package Raxos\Search\Enum

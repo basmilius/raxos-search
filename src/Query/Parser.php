@@ -5,7 +5,8 @@ namespace Raxos\Search\Query;
 
 use Raxos\Contract\Search\QueryNodeInterface;
 use Raxos\DateTime\Date;
-use Raxos\Search\Error\{InvalidRangeEndpointException, UnexpectedTokenException};
+use Raxos\Search\Error\InvalidRangeEndpointException;
+use Raxos\Search\Error\UnexpectedTokenException;
 use Raxos\Search\Query\Token as T;
 use Raxos\Search\Query\Token\Query;
 use function array_map;
@@ -24,20 +25,28 @@ use function str_contains;
  */
 final class Parser
 {
-
+    /**
+     * Tracks the current position without rescanning earlier input.
+     *
+     * @var int
+     * @author Bas Milius <bas@mili.us>
+     * @since 2.0.0
+     */
     private int $position = 0;
 
     /**
      * Parser constructor.
      *
-     * @param Token[] $tokens
+     * @param T[] $tokens
      *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
     public function __construct(
         public readonly array $tokens
-    ) {}
+    )
+    {
+    }
 
     /**
      * Parses the node into the search query structure.
@@ -48,7 +57,7 @@ final class Parser
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    public function parse(): T\Query
+    public function parse(): Query
     {
         $nodes = [];
 
@@ -79,7 +88,7 @@ final class Parser
             $normalized[] = new T\Phrase(implode(' ', array_map(static fn(QueryNodeInterface $node): string => $node instanceof T\Phrase ? $node->text : (string)$node, $text)));
         }
 
-        return new T\Query($normalized);
+        return new Query($normalized);
     }
 
     /**
@@ -115,12 +124,12 @@ final class Parser
      *
      * @param TokenType $type
      *
-     * @return Token
+     * @return T
      * @throws UnexpectedTokenException
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    private function consume(TokenType $type): Token
+    private function consume(TokenType $type): T
     {
         if (!$this->peekIs($type)) {
             throw new UnexpectedTokenException($type);
@@ -227,7 +236,7 @@ final class Parser
      * @throws InvalidRangeEndpointException
      * @throws UnexpectedTokenException
      * @author Bas Milius <bas@mili.us>
-     * @since 3.2.0
+     * @since 2.0.0
      */
     private function parsePart(): QueryNodeInterface
     {
@@ -307,11 +316,11 @@ final class Parser
     /**
      * Peeks at the token at the current position.
      *
-     * @return Token
+     * @return T
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    private function peek(): Token
+    private function peek(): T
     {
         return $this->tokens[$this->position];
     }
@@ -356,11 +365,11 @@ final class Parser
     /**
      * Returns the previous token.
      *
-     * @return Token
+     * @return T
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    private function previous(): Token
+    private function previous(): T
     {
         return $this->tokens[$this->position - 1];
     }
@@ -378,5 +387,4 @@ final class Parser
             $this->position++;
         }
     }
-
 }

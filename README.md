@@ -20,7 +20,7 @@ Search Raxos ORM models with a query language, reusable filters and access polic
 Requires PHP 8.5 or later. Enable the `ctype`, `mbstring` PHP extensions. Composer checks the remaining package and extension dependencies declared in [composer.json](composer.json).
 
 ```sh
-composer require "raxos/search:^3.2"
+composer require "raxos/search:^3.3"
 ```
 
 ## Usage

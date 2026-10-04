@@ -20,8 +20,9 @@ use function mb_str_split;
  */
 final class Lexer
 {
-
     /**
+     * Caches Unicode characters so scanning does not repeatedly split the query text.
+     *
      * @var string[]
      * @author Bas Milius <bas@mili.us>
      * @since 3.2.0
@@ -29,12 +30,29 @@ final class Lexer
     private readonly array $characters;
 
     /**
+     * Bounds character access using the cached Unicode sequence.
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 3.2.0
      */
     private readonly int $length;
+
+    /**
+     * Tracks the current position without rescanning earlier input.
+     *
+     * @var int
+     * @author Bas Milius <bas@mili.us>
+     * @since 2.0.0
+     */
     private int $position = 0;
 
+    /**
+     * Stops scanning after the final available input character.
+     *
+     * @var bool
+     * @author Bas Milius <bas@mili.us>
+     * @since 2.0.0
+     */
     public bool $eof {
         get => $this->position >= $this->length;
     }
@@ -75,21 +93,25 @@ final class Lexer
 
             if (ctype_space($character)) {
                 $tokens[] = $this->consumeWhitespace($this->position);
+
                 continue;
             }
 
             if ($character === ':') {
                 $tokens[] = $this->consumeColon($this->position);
+
                 continue;
             }
 
             if ($character === '.' && ($this->peekN(2) === '..' || $this->peekN(3) === '...')) {
                 $tokens[] = $this->consumeDots($this->position);
+
                 continue;
             }
 
             if ($character === '"') {
                 $tokens[] = $this->consumeQuoted($this->position);
+
                 continue;
             }
 
@@ -141,7 +163,7 @@ final class Lexer
      *
      * @return Token
      * @author Bas Milius <bas@mili.us>
-     * @since 3.2.0
+     * @since 2.0.0
      */
     private function consumeDots(int $position): Token
     {
@@ -176,6 +198,7 @@ final class Lexer
                 $next = $this->peek();
                 $this->position++;
                 $buffer .= $next;
+
                 continue;
             }
 
@@ -228,5 +251,4 @@ final class Lexer
     {
         return implode('', array_slice($this->characters, $this->position, $length));
     }
-
 }

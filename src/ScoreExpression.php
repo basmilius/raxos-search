@@ -3,11 +3,16 @@ declare(strict_types=1);
 
 namespace Raxos\Search;
 
-use Raxos\Contract\Database\{ConnectionInterface, GrammarInterface};
-use Raxos\Contract\Database\Query\{QueryExpressionInterface, QueryInterface, QueryLiteralInterface};
+use Raxos\Contract\Database\ConnectionInterface;
+use Raxos\Contract\Database\GrammarInterface;
+use Raxos\Contract\Database\Query\QueryExpressionInterface;
+use Raxos\Contract\Database\Query\QueryInterface;
+use Raxos\Contract\Database\Query\QueryLiteralInterface;
 
 /**
  * Class ScoreExpression
+ *
+ * Weights a complete SQL score expression without changing its arithmetic precedence.
  *
  * @author Bas Milius <bas@mili.us>
  * @package Raxos\Search
@@ -15,7 +20,6 @@ use Raxos\Contract\Database\Query\{QueryExpressionInterface, QueryInterface, Que
  */
 final readonly class ScoreExpression implements QueryExpressionInterface
 {
-
     /**
      * ScoreExpression constructor.
      *
@@ -30,18 +34,23 @@ final readonly class ScoreExpression implements QueryExpressionInterface
         public QueryLiteralInterface|QueryExpressionInterface $expression,
         public array $params = [],
         public int $weight = 1
-    ) {}
+    )
+    {
+    }
 
     /**
      * {@inheritdoc}
      * @author Bas Milius <bas@mili.us>
-     * @since 3.2.0
+     * @since 2.0.0
      */
-    public function compile(QueryInterface $query, ConnectionInterface $connection, GrammarInterface $grammar): void
+    public function compile(
+        QueryInterface $query,
+        ConnectionInterface $connection,
+        GrammarInterface $grammar
+    ): void
     {
         $query->raw('(');
         $query->compile($this->expression);
         $query->raw(") * {$this->weight}");
     }
-
 }

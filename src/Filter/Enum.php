@@ -7,7 +7,9 @@ use BackedEnum;
 use Raxos\Contract\Collection\MapInterface;
 use Raxos\Contract\Database\Orm\StructureInterface;
 use Raxos\Contract\Database\Query\QueryInterface;
-use Raxos\Contract\Search\{FilterInterface, QueryNodeInterface, StructuredFilterInterface};
+use Raxos\Contract\Search\FilterInterface;
+use Raxos\Contract\Search\QueryNodeInterface;
+use Raxos\Contract\Search\StructuredFilterInterface;
 use Raxos\Database\Orm\Model;
 use Raxos\Database\Query\Literal\Literal;
 use Raxos\Search\Attribute\Filter;
@@ -27,7 +29,6 @@ use function is_int;
  */
 final readonly class Enum implements FilterInterface, StructuredFilterInterface
 {
-
     /**
      * Enum constructor.
      *
@@ -44,14 +45,21 @@ final readonly class Enum implements FilterInterface, StructuredFilterInterface
         public ?string $modelClass = null,
         public ?string $modelKey = null,
         public int $weight = 1
-    ) {}
+    )
+    {
+    }
 
     /**
      * {@inheritdoc}
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    public function apply(StructureInterface $structure, Filter $attribute, QueryInterface $query, QueryNodeInterface $searchQuery): ScoreExpression
+    public function apply(
+        StructureInterface $structure,
+        Filter $attribute,
+        QueryInterface $query,
+        QueryNodeInterface $searchQuery
+    ): ScoreExpression
     {
         if (!($searchQuery instanceof T\Word)) {
             throw new InvalidFilterValueException(self::class);
@@ -62,6 +70,7 @@ final readonly class Enum implements FilterInterface, StructuredFilterInterface
         foreach ($this->enum::cases() as $case) {
             if ((string)$case->value === $searchQuery->text) {
                 $enumCase = $case;
+
                 break;
             }
         }
@@ -87,9 +96,12 @@ final readonly class Enum implements FilterInterface, StructuredFilterInterface
     /**
      * {@inheritdoc}
      * @author Bas Milius <bas@mili.us>
-     * @since 3.2.0
+     * @since 2.2.0
      */
-    public function fromInput(string $property, MapInterface $params): ?QueryNodeInterface
+    public function fromInput(
+        string $property,
+        MapInterface $params
+    ): ?QueryNodeInterface
     {
         if (!$params->has($property)) {
             return null;
@@ -122,5 +134,4 @@ final readonly class Enum implements FilterInterface, StructuredFilterInterface
 
         return [['name' => $property, 'type' => $isInt ? 'integer' : 'string', 'enum' => array_map(static fn(BackedEnum $case) => $case->value, $cases)]];
     }
-
 }
