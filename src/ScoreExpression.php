@@ -20,6 +20,7 @@ use Raxos\Contract\Database\Query\QueryLiteralInterface;
  */
 final readonly class ScoreExpression implements QueryExpressionInterface
 {
+
     /**
      * ScoreExpression constructor.
      *
@@ -38,6 +39,7 @@ final readonly class ScoreExpression implements QueryExpressionInterface
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
@@ -51,4 +53,5 @@ final readonly class ScoreExpression implements QueryExpressionInterface
         $query->compile($this->expression);
         $query->raw(") * {$this->weight}");
     }
+
 }

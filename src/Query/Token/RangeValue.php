@@ -33,6 +33,7 @@ final readonly class RangeValue implements QueryNodeInterface, Stringable
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */

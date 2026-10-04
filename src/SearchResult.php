@@ -32,6 +32,7 @@ final readonly class SearchResult implements JsonSerializable
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */

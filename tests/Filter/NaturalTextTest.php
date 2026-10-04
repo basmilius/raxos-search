@@ -1,10 +1,14 @@
 <?php
 declare(strict_types=1);
 
+use Raxos\Database\Connection\{MariaDb, MySql};
+use Raxos\Database\Db;
+use Raxos\Database\Orm\Structure\StructureGenerator;
 use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Error\InvalidFilterValueException;
 use Raxos\Search\Filter\NaturalText;
 use Raxos\Search\Query\Token\{NumberValue, Phrase};
+use RaxosTests\Search\UnitFullText;
 use function RaxosTests\Search\searchUnitContext;
 
 covers(NaturalText::class);
@@ -23,16 +27,16 @@ it('executes fulltext matches and weighted scores on both supported native engin
     if (!$dsn) {
         $this->markTestSkipped($variable . ' is not configured.');
     }
-    $class = $driver === 'mysql' ? Raxos\Database\Connection\MySql::class : Raxos\Database\Connection\MariaDb::class;
+    $class = $driver === 'mysql' ? MySql::class : MariaDb::class;
     $connection = new $class($dsn, getenv('RAXOS_MYSQL_USER') ?: 'root', getenv('RAXOS_MYSQL_PASSWORD') ?: '');
     $connection->connect();
-    Raxos\Database\Db::register($connection);
+    Db::register($connection);
     $connection->execute('DROP TABLE IF EXISTS raxos_unit_fulltext');
     try {
         $connection->execute('CREATE TABLE raxos_unit_fulltext (id INTEGER PRIMARY KEY,title TEXT NOT NULL,FULLTEXT(title)) ENGINE=InnoDB');
         $connection->execute("INSERT INTO raxos_unit_fulltext VALUES (1,'apple orchard'),(2,'banana field'),(3,'cherry garden')");
-        $model = RaxosTests\Search\UnitFullText::class;
-        $structure = Raxos\Database\Orm\Structure\StructureGenerator::for($model);
+        $model = UnitFullText::class;
+        $structure = StructureGenerator::for($model);
         $filter = new NaturalText(['title'], $boolean, $expansion, weight: 4);
         $query = $connection->query()->select(['id'])->from($model::table());
         $score = $filter->apply($structure, new Filter('text', $filter), $query, new Phrase('apple'));

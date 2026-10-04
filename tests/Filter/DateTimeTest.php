@@ -2,10 +2,11 @@
 declare(strict_types=1);
 
 use Raxos\Collection\Map;
+use Raxos\DateTime\DateTime as DateTimeUtil;
 use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Error\InvalidFilterValueException;
 use Raxos\Search\Filter\DateTime;
-use Raxos\Search\Query\Token\Word;
+use Raxos\Search\Query\Token\{DateTimeValue, NumberValue, RangeValue, Word};
 use function RaxosTests\Search\searchUnitContext;
 
 covers(DateTime::class);
@@ -37,14 +38,14 @@ it('rejects non-scalar endpoints and invalid date range nodes before modifying S
     expect(fn() => $filter->fromInput('created', new Map(['created_after' => $value])))->toThrow(InvalidFilterValueException::class);
 })->with([[[]], [new stdClass()]]);
 
-it('rejects empty or non-date range endpoints before adding either bound', function (Raxos\Search\Query\Token\RangeValue $range): void {
+it('rejects empty or non-date range endpoints before adding either bound', function (RangeValue $range): void {
     [, $structure, $query] = searchUnitContext();
     $sql = $query->toSql();
     $filter = new DateTime(modelKey: 'created_at');
     expect(fn() => $filter->apply($structure, new Filter('created', $filter), $query, $range))->toThrow(InvalidFilterValueException::class);
     expect($query->toSql())->toBe($sql);
 })->with([
-    [new Raxos\Search\Query\Token\RangeValue(null, null)],
-    [new Raxos\Search\Query\Token\RangeValue(new Raxos\Search\Query\Token\NumberValue(1), null)],
-    [new Raxos\Search\Query\Token\RangeValue(new Raxos\Search\Query\Token\DateTimeValue(Raxos\DateTime\DateTime::parse('2026-01-01')), new Raxos\Search\Query\Token\NumberValue(1))]
+    [new RangeValue(null, null)],
+    [new RangeValue(new NumberValue(1), null)],
+    [new RangeValue(new DateTimeValue(DateTimeUtil::parse('2026-01-01')), new NumberValue(1))]
 ]);

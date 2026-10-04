@@ -29,7 +29,6 @@ it('rejects incompatible values and ranges without numeric endpoints', function 
     }
 });
 
-
 it('executes weighted scores for every numeric range form', function (mixed $node, array $scores): void {
     [, $structure, $query] = searchUnitContext();
     $filter = new Number(modelKey: 'quantity', weight: 2);
@@ -47,9 +46,9 @@ it('executes weighted scores for every numeric range form', function (mixed $nod
 ]);
 
 it('rejects non-finite numeric values before emitting SQL', function (float $value): void {
-    [, $structure, $query] = RaxosTests\Search\searchUnitContext();
+    [, $structure, $query] = searchUnitContext();
     $sql = $query->toSql();
-    $filter = new Raxos\Search\Filter\Number(modelKey: 'quantity');
-    expect(fn() => $filter->apply($structure, new Raxos\Search\Attribute\Filter('quantity', $filter), $query, new Raxos\Search\Query\Token\NumberValue($value)))->toThrow(Raxos\Search\Error\InvalidFilterValueException::class);
+    $filter = new Number(modelKey: 'quantity');
+    expect(fn() => $filter->apply($structure, new Filter('quantity', $filter), $query, new NumberValue($value)))->toThrow(InvalidFilterValueException::class);
     expect($query->toSql())->toBe($sql);
 })->with([INF, -INF, NAN]);

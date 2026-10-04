@@ -4,8 +4,9 @@ declare(strict_types=1);
 use Raxos\Collection\Map;
 use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Error\InvalidFilterValueException;
-use Raxos\Search\Filter\{Exact, Some};
+use Raxos\Search\Filter\{Enum, Exact, Some};
 use Raxos\Search\Query\Token\Word;
+use RaxosTests\Search\UnitSearchState;
 use function RaxosTests\Search\searchUnitContext;
 
 covers(Some::class);
@@ -22,11 +23,10 @@ it('groups child predicates with OR and restores the original query mode', funct
 
 it('restores the query mode even when a child filter fails', function (): void {
     [, $structure, $query] = searchUnitContext();
-    $filter = new Some([new Exact(modelKey: 'id'), new Raxos\Search\Filter\Enum(RaxosTests\Search\UnitSearchState::class)]);
+    $filter = new Some([new Exact(modelKey: 'id'), new Enum(UnitSearchState::class)]);
     expect(fn() => $filter->apply($structure, new Filter('field', $filter), $query, new Word('invalid')))->toThrow(InvalidFilterValueException::class);
     expect($query->convertToOr)->toBeFalse();
 });
-
 
 it('rejects compound structured input without PHP conversion warnings', function (): void {
     $filter = new Some([]);
@@ -34,7 +34,6 @@ it('rejects compound structured input without PHP conversion warnings', function
         expect(fn() => $filter->fromInput('field', new Map(['field' => $input])))->toThrow(InvalidFilterValueException::class);
     }
 });
-
 
 it('preserves an enclosing OR mode and associative child keys', function (): void {
     [, $structure, $query] = searchUnitContext();

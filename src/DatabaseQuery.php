@@ -45,6 +45,7 @@ class DatabaseQuery extends Query
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */

@@ -12,7 +12,9 @@ namespace Raxos\Search\Enum;
  */
 enum PolicyVerdict
 {
+
     case ALLOW;
     case DENY;
     case DENY_SILENT;
+
 }

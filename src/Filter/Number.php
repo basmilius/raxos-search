@@ -5,12 +5,11 @@ namespace Raxos\Search\Filter;
 
 use Raxos\Contract\Database\Orm\StructureInterface;
 use Raxos\Contract\Database\Query\QueryInterface;
-use Raxos\Contract\Search\FilterInterface;
-use Raxos\Contract\Search\QueryNodeInterface;
+use Raxos\Contract\Search\{FilterInterface, QueryNodeInterface};
 use Raxos\Database\Query\Expr;
 use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Error\InvalidFilterValueException;
-use Raxos\Search\Query\Token as T;
+use Raxos\Search\Query\Token\{NumberValue, RangeValue};
 use Raxos\Search\ScoreExpression;
 use function abs;
 use function max;
@@ -25,6 +24,7 @@ use function Raxos\Database\Query\literal;
  */
 final readonly class Number implements FilterInterface
 {
+
     /**
      * Number constructor.
      *
@@ -43,6 +43,7 @@ final readonly class Number implements FilterInterface
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
@@ -60,15 +61,15 @@ final readonly class Number implements FilterInterface
         $columnQuery->compile($col);
         $scoreColumn = $columnQuery->toSql();
 
-        if ($searchQuery instanceof T\RangeValue) {
-            if (($searchQuery->from !== null && !($searchQuery->from instanceof T\NumberValue))
-                || ($searchQuery->to !== null && !($searchQuery->to instanceof T\NumberValue))
+        if ($searchQuery instanceof RangeValue) {
+            if (($searchQuery->from !== null && !($searchQuery->from instanceof NumberValue))
+                || ($searchQuery->to !== null && !($searchQuery->to instanceof NumberValue))
                 || ($searchQuery->from === null && $searchQuery->to === null)) {
                 throw new InvalidFilterValueException(self::class);
             }
 
-            $from = $searchQuery->from instanceof T\NumberValue ? $searchQuery->from->value : null;
-            $to = $searchQuery->to instanceof T\NumberValue ? $searchQuery->to->value : null;
+            $from = $searchQuery->from instanceof NumberValue ? $searchQuery->from->value : null;
+            $to = $searchQuery->to instanceof NumberValue ? $searchQuery->to->value : null;
 
             if (($from !== null && !is_finite((float)$from)) || ($to !== null && !is_finite((float)$to))) {
                 throw new InvalidFilterValueException(self::class);
@@ -106,7 +107,7 @@ final readonly class Number implements FilterInterface
             ), weight: $this->weight);
         }
 
-        if ($searchQuery instanceof T\NumberValue) {
+        if ($searchQuery instanceof NumberValue) {
             if (!is_finite((float)$searchQuery->value)) {
                 throw new InvalidFilterValueException(self::class);
             }
@@ -121,4 +122,5 @@ final readonly class Number implements FilterInterface
 
         throw new InvalidFilterValueException(self::class);
     }
+
 }

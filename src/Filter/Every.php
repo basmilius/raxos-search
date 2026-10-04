@@ -25,6 +25,7 @@ use function count;
  */
 final readonly class Every implements FilterInterface
 {
+
     /**
      * Every constructor.
      *
@@ -45,6 +46,7 @@ final readonly class Every implements FilterInterface
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
@@ -84,4 +86,5 @@ final readonly class Every implements FilterInterface
 
         return new ScoreExpression(count($scores) === 1 ? $scores[0] : Expr::least(...$scores), weight: $this->weight);
     }
+
 }

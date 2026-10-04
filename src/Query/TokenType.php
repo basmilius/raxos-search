@@ -12,10 +12,12 @@ namespace Raxos\Search\Query;
  */
 enum TokenType
 {
+
     case COLON;
     case DOTS;
     case EOF;
     case QUOTED;
     case WHITESPACE;
     case WORD;
+
 }

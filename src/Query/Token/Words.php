@@ -36,6 +36,7 @@ final readonly class Words implements QueryNodeInterface, QueryTextNodeInterface
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */

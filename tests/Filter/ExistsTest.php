@@ -31,17 +31,15 @@ it('matches related enum values and rejects missing enum cases or nontext nodes'
     expect(new Exists(UnitSearchTag::class, [], 'state')->describe('tag'))->toBe([['name' => 'tag', 'type' => 'string']]);
 });
 
-
 it('rejects compound structured input without PHP conversion warnings', function (): void {
-    $filter = new Exists(RaxosTests\Search\UnitSearchTag::class, ['product_id' => 'id']);
+    $filter = new Exists(UnitSearchTag::class, ['product_id' => 'id']);
     foreach ([[], ['bad'], new stdClass()] as $input) {
         expect(fn() => $filter->fromInput('field', new Map(['field' => $input])))->toThrow(InvalidFilterValueException::class);
     }
 });
 
-
 it('retains native boolean input instead of treating false as an empty filter', function (): void {
-    $filter = new Exists(RaxosTests\Search\UnitSearchTag::class, ['product_id' => 'id']);
+    $filter = new Exists(UnitSearchTag::class, ['product_id' => 'id']);
     expect($filter->fromInput('field', new Map(['field' => false]))->text)->toBe('false')
         ->and($filter->fromInput('field', new Map(['field' => true]))->text)->toBe('true');
 });

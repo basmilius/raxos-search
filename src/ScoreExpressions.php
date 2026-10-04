@@ -30,6 +30,7 @@ final readonly class ScoreExpressions implements QueryExpressionInterface
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */

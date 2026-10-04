@@ -31,6 +31,7 @@ final readonly class DateTimeValue implements QueryNodeInterface, Stringable
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.2.0
      */

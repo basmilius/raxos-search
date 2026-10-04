@@ -2,17 +2,17 @@
 declare(strict_types=1);
 
 use Raxos\Error\InvalidArgumentException;
-use Raxos\Search\Query\{Lexer, TokenType};
+use Raxos\Search\Query\{Lexer, Token, TokenType};
 
 covers(Lexer::class);
 
 it('preserves codepoint positions and query syntax', function (): void {
     $tokens = new Lexer('café: "héllo" 1..9')->tokenize();
-    expect(array_map(static fn(Raxos\Search\Query\Token $token) => $token->type, $tokens))->toBe([
+    expect(array_map(static fn(Token $token) => $token->type, $tokens))->toBe([
         TokenType::WORD, TokenType::COLON, TokenType::WHITESPACE, TokenType::QUOTED,
         TokenType::WHITESPACE, TokenType::WORD, TokenType::DOTS, TokenType::WORD, TokenType::EOF,
     ]);
-    expect(array_map(static fn(Raxos\Search\Query\Token $token) => $token->position, $tokens))->toBe([0, 4, 5, 6, 13, 14, 15, 17, 18]);
+    expect(array_map(static fn(Token $token) => $token->position, $tokens))->toBe([0, 4, 5, 6, 13, 14, 15, 17, 18]);
     expect($tokens[3]->lexeme)->toBe('héllo');
 });
 

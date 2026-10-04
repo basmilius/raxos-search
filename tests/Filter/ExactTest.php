@@ -30,7 +30,6 @@ it('rejects incompatible query nodes before executing SQL', function (): void {
     expect(fn() => $filter->apply($structure, new Filter('field', $filter), $query, new NumberValue(1)))->toThrow(InvalidFilterValueException::class);
 });
 
-
 it('rejects compound structured input without PHP conversion warnings', function (): void {
     $filter = new Exact();
     foreach ([[], ['bad'], new stdClass()] as $input) {

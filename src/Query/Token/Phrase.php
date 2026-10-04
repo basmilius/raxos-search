@@ -31,6 +31,7 @@ final readonly class Phrase implements QueryNodeInterface, QueryTextNodeInterfac
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */

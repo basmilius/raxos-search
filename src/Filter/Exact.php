@@ -6,17 +6,14 @@ namespace Raxos\Search\Filter;
 use Raxos\Contract\Collection\MapInterface;
 use Raxos\Contract\Database\Orm\StructureInterface;
 use Raxos\Contract\Database\Query\QueryInterface;
-use Raxos\Contract\Search\FilterInterface;
-use Raxos\Contract\Search\QueryNodeInterface;
-use Raxos\Contract\Search\StructuredFilterInterface;
+use Raxos\Contract\Search\{FilterInterface, QueryNodeInterface, StructuredFilterInterface};
 use Raxos\Database\Query\Literal\Literal;
 use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Error\InvalidFilterValueException;
-use Raxos\Search\Query\Token as T;
+use Raxos\Search\Query\Token\Word;
 use Raxos\Search\ScoreExpression;
 use Stringable;
 use function is_scalar;
-
 
 /**
  * Class Exact
@@ -27,6 +24,7 @@ use function is_scalar;
  */
 final readonly class Exact implements FilterInterface, StructuredFilterInterface
 {
+
     /**
      * Exact constructor.
      *
@@ -45,6 +43,7 @@ final readonly class Exact implements FilterInterface, StructuredFilterInterface
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.2.0
      */
@@ -55,7 +54,7 @@ final readonly class Exact implements FilterInterface, StructuredFilterInterface
         QueryNodeInterface $searchQuery
     ): ScoreExpression
     {
-        if (!($searchQuery instanceof T\Word)) {
+        if (!($searchQuery instanceof Word)) {
             throw new InvalidFilterValueException(self::class);
         }
 
@@ -72,6 +71,7 @@ final readonly class Exact implements FilterInterface, StructuredFilterInterface
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.2.0
      */
@@ -96,11 +96,12 @@ final readonly class Exact implements FilterInterface, StructuredFilterInterface
             return null;
         }
 
-        return new T\Word($value);
+        return new Word($value);
     }
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.2.0
      */
@@ -108,4 +109,5 @@ final readonly class Exact implements FilterInterface, StructuredFilterInterface
     {
         return [['name' => $property, 'type' => 'string']];
     }
+
 }

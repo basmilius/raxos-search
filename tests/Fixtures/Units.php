@@ -12,26 +12,31 @@ use Raxos\Database\Db;
 use Raxos\Database\Orm\Attribute\{Column, PrimaryKey, Table};
 use Raxos\Database\Orm\Model;
 use Raxos\Database\Orm\Structure\StructureGenerator;
-use Raxos\Search\Attribute\{Filter, Policy, Preset};
 use Raxos\Search\{DatabaseQuery, ScoreExpression};
+use Raxos\Search\Attribute\{Filter, Policy, Preset};
 use Raxos\Search\Enum\PolicyVerdict;
 use Raxos\Search\Filter\{Exact, Text};
 use Raxos\Search\Policy\PolicyDecision;
 
 enum UnitSearchState: string
 {
+
     case Blue = 'blue';
     case Red = 'red';
+
 }
 
 enum UnitSearchCode: int
 {
+
     case First = 1;
     case Second = 2;
+
 }
 
 final readonly class UnitScoreFilter implements FilterInterface
 {
+
     public function __construct(public ?string $modelClass = null, public ?string $modelKey = null, public int $weight = 1) {}
 
     public function apply(StructureInterface $structure, Filter $attribute, QueryInterface $query, QueryNodeInterface $searchQuery): ScoreExpression
@@ -40,10 +45,12 @@ final readonly class UnitScoreFilter implements FilterInterface
 
         return new ScoreExpression($structure->class::col('quantity'));
     }
+
 }
 
 final readonly class UnitPolicy implements PolicyInterface
 {
+
     public function __construct(public PolicyVerdict $verdict = PolicyVerdict::ALLOW) {}
 
     public function apply(StructureInterface $structure, QueryInterface $query, MapInterface $context): PolicyDecision
@@ -58,6 +65,7 @@ final readonly class UnitPolicy implements PolicyInterface
             PolicyVerdict::DENY_SILENT => PolicyDecision::denySilent('Unit silence'),
         };
     }
+
 }
 
 #[Table('raxos_unit_search')]
@@ -68,6 +76,7 @@ final readonly class UnitPolicy implements PolicyInterface
 #[Preset('first', ['group' => '1'])]
 class UnitSearchProduct extends Model
 {
+
     #[PrimaryKey]
     public int $id;
     #[Column]
@@ -82,6 +91,7 @@ class UnitSearchProduct extends Model
     public ?string $tag;
     #[Column]
     public string $created_at;
+
 }
 
 #[Table('raxos_unit_search')]
@@ -97,12 +107,14 @@ final class SilentSearchProduct extends UnitSearchProduct {}
 #[Table('raxos_unit_tags')]
 final class UnitSearchTag extends Model
 {
+
     #[PrimaryKey]
     public int $id;
     #[Column]
     public int $product_id;
     #[Column]
     public string $state;
+
 }
 
 function searchUnitContext(): array

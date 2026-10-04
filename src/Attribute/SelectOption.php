@@ -21,13 +21,15 @@ final readonly class SelectOption
 {
 
     /**
-     * SelectOption constructor.
+     * Matches search keys with LIKE and limits type-ahead results.
+     * A null order uses the first search key; a null emptyLimit uses limit
+     * for requests without a search term.
      *
-     * @param string[] $searchKeys columns matched with `LIKE` for type-ahead
-     * @param string|null $order order-by column; defaults to the first search key
+     * @param string[] $searchKeys
+     * @param string|null $order
      * @param bool $descending
-     * @param int $limit maximum results when searching
-     * @param int|null $emptyLimit maximum results without a search term; defaults to $limit
+     * @param int $limit
+     * @param int|null $emptyLimit
      *
      * @author Bas Milius <bas@mili.us>
      * @since 2.2.0

@@ -11,7 +11,8 @@ use Raxos\Contract\Search\{SearchExceptionInterface, SearchProviderInterface, St
 use Raxos\Database\Orm\Model;
 use Raxos\Search\Enum\PolicyVerdict;
 use Raxos\Search\Error\IllegalSearchException;
-use Raxos\Search\Query\{Lexer, Parser, Token as T};
+use Raxos\Search\Query\{Lexer, Parser};
+use Raxos\Search\Query\Token\{Field, Phrase, Query};
 use function array_map;
 use function array_merge;
 use function array_values;
@@ -32,6 +33,7 @@ final class SearchProvider implements SearchProviderInterface
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
@@ -42,6 +44,7 @@ final class SearchProvider implements SearchProviderInterface
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.2.0
      */
@@ -74,6 +77,7 @@ final class SearchProvider implements SearchProviderInterface
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
@@ -85,8 +89,8 @@ final class SearchProvider implements SearchProviderInterface
 
         foreach ($searchQuery->nodes as $node) {
             match (true) {
-                $node instanceof T\Field => $filters->set($node->key, $node->value),
-                $node instanceof T\Phrase => $filters->set('q', $node),
+                $node instanceof Field => $filters->set($node->key, $node->value),
+                $node instanceof Phrase => $filters->set('q', $node),
                 default => null
             };
         }
@@ -172,12 +176,12 @@ final class SearchProvider implements SearchProviderInterface
      *
      * @param string $query
      *
-     * @return T\Query
+     * @return Query
      * @throws SearchExceptionInterface
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    private function tokenize(string $query): T\Query
+    private function tokenize(string $query): Query
     {
         $lexer = new Lexer($query);
         $tokens = $lexer->tokenize();

@@ -5,10 +5,9 @@ namespace Raxos\Search\Query;
 
 use Raxos\Contract\Search\QueryNodeInterface;
 use Raxos\DateTime\Date;
-use Raxos\Search\Error\InvalidRangeEndpointException;
-use Raxos\Search\Error\UnexpectedTokenException;
+use Raxos\Search\Error\{InvalidRangeEndpointException, UnexpectedTokenException};
 use Raxos\Search\Query\Token as T;
-use Raxos\Search\Query\Token\Query;
+use Raxos\Search\Query\Token\{DateValue, Field, NumberValue, Phrase, Query, RangeValue, Word, Words};
 use function array_map;
 use function count;
 use function implode;
@@ -25,6 +24,7 @@ use function str_contains;
  */
 final class Parser
 {
+
     /**
      * Tracks the current position without rescanning earlier input.
      *
@@ -75,7 +75,7 @@ final class Parser
         $text = [];
 
         foreach ($nodes as $node) {
-            if ($node instanceof T\Phrase || $node instanceof T\Word || $node instanceof T\Words) {
+            if ($node instanceof Phrase || $node instanceof Word || $node instanceof Words) {
                 $text[] = $node;
             } else {
                 $normalized[] = $node;
@@ -83,7 +83,7 @@ final class Parser
         }
 
         if (!empty($text)) {
-            $normalized[] = new T\Phrase(implode(' ', array_map(static fn(QueryNodeInterface $node): string => $node instanceof T\Phrase ? $node->text : (string)$node, $text)));
+            $normalized[] = new Phrase(implode(' ', array_map(static fn(QueryNodeInterface $node): string => $node instanceof Phrase ? $node->text : (string)$node, $text)));
         }
 
         return new Query($normalized);
@@ -104,17 +104,17 @@ final class Parser
             $word = $words[0];
 
             if ($this->looksLikeNumber($word)) {
-                return new T\NumberValue(str_contains($word, '.') ? (float)$word : (int)$word);
+                return new NumberValue(str_contains($word, '.') ? (float)$word : (int)$word);
             }
 
             if ($this->looksLikeDate($word)) {
-                return new T\DateValue(Date::parse($word));
+                return new DateValue(Date::parse($word));
             }
 
-            return new T\Word($word);
+            return new Word($word);
         }
 
-        return new T\Words($words);
+        return new Words($words);
     }
 
     /**
@@ -217,11 +217,11 @@ final class Parser
         $lex = $token->lexeme;
 
         if ($this->looksLikeNumber($lex)) {
-            return new T\NumberValue(str_contains($lex, '.') ? (float)$lex : (int)$lex);
+            return new NumberValue(str_contains($lex, '.') ? (float)$lex : (int)$lex);
         }
 
         if ($this->looksLikeDate($lex)) {
-            return new T\DateValue(Date::parse($lex));
+            return new DateValue(Date::parse($lex));
         }
 
         throw new InvalidRangeEndpointException($lex, $token->position);
@@ -268,9 +268,9 @@ final class Parser
                         $this->consume(TokenType::DOTS);
                     }
 
-                    return new T\Field($key, new T\RangeValue($from, $to));
+                    return new Field($key, new RangeValue($from, $to));
                 } else {
-                    return new T\Field($key, $from);
+                    return new Field($key, $from);
                 }
             }
 
@@ -278,7 +278,7 @@ final class Parser
             if ($this->match(TokenType::QUOTED)) {
                 $quoted = $this->previous()->lexeme;
 
-                return new T\Field($key, new T\Phrase($quoted));
+                return new Field($key, new Phrase($quoted));
             }
 
             // Single word value
@@ -294,21 +294,21 @@ final class Parser
                     $this->skipWhitespace();
                 }
 
-                return new T\Field($key, $this->coerceWordsOrScalar($words));
+                return new Field($key, $this->coerceWordsOrScalar($words));
             }
 
-            return new T\Field($key, null);
+            return new Field($key, null);
         }
 
         // Quoted value
         if ($this->match(TokenType::QUOTED)) {
-            return new T\Phrase($this->previous()->lexeme);
+            return new Phrase($this->previous()->lexeme);
         }
 
         // Single word
         $word = $this->consume(TokenType::WORD)->lexeme;
 
-        return new T\Word($word);
+        return new Word($word);
     }
 
     /**
@@ -385,4 +385,5 @@ final class Parser
             $this->position++;
         }
     }
+
 }

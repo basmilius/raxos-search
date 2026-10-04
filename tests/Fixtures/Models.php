@@ -29,4 +29,5 @@ final class SearchProduct extends Model
     {
         return [...$columns, self::col('*'), 'quantity' => literal('`raxos_test_search_products`.`quantity` + 1')];
     }
+
 }

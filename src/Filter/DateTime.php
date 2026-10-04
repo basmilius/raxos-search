@@ -6,14 +6,12 @@ namespace Raxos\Search\Filter;
 use Raxos\Contract\Collection\MapInterface;
 use Raxos\Contract\Database\Orm\StructureInterface;
 use Raxos\Contract\Database\Query\QueryInterface;
-use Raxos\Contract\Search\FilterInterface;
-use Raxos\Contract\Search\QueryNodeInterface;
-use Raxos\Contract\Search\StructuredFilterInterface;
+use Raxos\Contract\Search\{FilterInterface, QueryNodeInterface, StructuredFilterInterface};
 use Raxos\Database\Query\Literal\Literal;
 use Raxos\DateTime\DateTime as DateTimeUtil;
 use Raxos\Search\Attribute\Filter;
 use Raxos\Search\Error\InvalidFilterValueException;
-use Raxos\Search\Query\Token as T;
+use Raxos\Search\Query\Token\{DateTimeValue, DateValue, RangeValue};
 use Raxos\Search\ScoreExpression;
 use Stringable;
 use Throwable;
@@ -28,6 +26,7 @@ use function is_scalar;
  */
 final readonly class DateTime implements FilterInterface, StructuredFilterInterface
 {
+
     /**
      * DateTime constructor.
      *
@@ -46,6 +45,7 @@ final readonly class DateTime implements FilterInterface, StructuredFilterInterf
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
@@ -56,10 +56,10 @@ final readonly class DateTime implements FilterInterface, StructuredFilterInterf
         QueryNodeInterface $searchQuery
     ): ScoreExpression
     {
-        if (!($searchQuery instanceof T\RangeValue)
+        if (!($searchQuery instanceof RangeValue)
             || ($searchQuery->from === null && $searchQuery->to === null)
-            || ($searchQuery->from !== null && !($searchQuery->from instanceof T\DateValue || $searchQuery->from instanceof T\DateTimeValue))
-            || ($searchQuery->to !== null && !($searchQuery->to instanceof T\DateValue || $searchQuery->to instanceof T\DateTimeValue))) {
+            || ($searchQuery->from !== null && !($searchQuery->from instanceof DateValue || $searchQuery->from instanceof DateTimeValue))
+            || ($searchQuery->to !== null && !($searchQuery->to instanceof DateValue || $searchQuery->to instanceof DateTimeValue))) {
             throw new InvalidFilterValueException(self::class);
         }
 
@@ -67,11 +67,11 @@ final readonly class DateTime implements FilterInterface, StructuredFilterInterf
         $modelKey = $this->modelKey ?? $attribute->property;
         $col = $modelClass::col($modelKey);
 
-        if ($searchQuery->from instanceof T\DateValue || $searchQuery->from instanceof T\DateTimeValue) {
+        if ($searchQuery->from instanceof DateValue || $searchQuery->from instanceof DateTimeValue) {
             $query->where($col, '>=', (string)$searchQuery->from);
         }
 
-        if ($searchQuery->to instanceof T\DateValue || $searchQuery->to instanceof T\DateTimeValue) {
+        if ($searchQuery->to instanceof DateValue || $searchQuery->to instanceof DateTimeValue) {
             $query->where($col, '<=', (string)$searchQuery->to);
         }
 
@@ -83,6 +83,7 @@ final readonly class DateTime implements FilterInterface, StructuredFilterInterf
 
     /**
      * {@inheritdoc}
+     *
      * @throws InvalidFilterValueException
      * @author Bas Milius <bas@mili.us>
      * @since 2.2.0
@@ -111,17 +112,18 @@ final readonly class DateTime implements FilterInterface, StructuredFilterInterf
         }
 
         try {
-            $from = $after !== '' ? new T\DateTimeValue(DateTimeUtil::parse($after)) : null;
-            $to = $before !== '' ? new T\DateTimeValue(DateTimeUtil::parse($before)) : null;
+            $from = $after !== '' ? new DateTimeValue(DateTimeUtil::parse($after)) : null;
+            $to = $before !== '' ? new DateTimeValue(DateTimeUtil::parse($before)) : null;
         } catch (Throwable) {
             throw new InvalidFilterValueException(self::class);
         }
 
-        return new T\RangeValue($from, $to);
+        return new RangeValue($from, $to);
     }
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.2.0
      */
@@ -132,4 +134,5 @@ final readonly class DateTime implements FilterInterface, StructuredFilterInterf
             ['name' => $property . '_before', 'type' => 'string', 'format' => 'date-time']
         ];
     }
+
 }

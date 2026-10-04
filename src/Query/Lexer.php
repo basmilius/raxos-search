@@ -20,6 +20,7 @@ use function mb_str_split;
  */
 final class Lexer
 {
+
     /**
      * Caches Unicode characters so scanning does not repeatedly split the query text.
      *
@@ -251,4 +252,5 @@ final class Lexer
     {
         return implode('', array_slice($this->characters, $this->position, $length));
     }
+
 }

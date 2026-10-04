@@ -8,6 +8,7 @@ use Raxos\Contract\Search\QueryNodeInterface;
 use Stringable;
 use function array_map;
 use function implode;
+use function strval;
 
 /**
  * Class Query
@@ -35,6 +36,7 @@ final readonly class Query implements QueryNodeInterface, DebuggableInterface, S
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
@@ -45,12 +47,13 @@ final readonly class Query implements QueryNodeInterface, DebuggableInterface, S
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
     public function __toString(): string
     {
-        return implode(' ', array_map(\strval(...), $this->nodes));
+        return implode(' ', array_map(strval(...), $this->nodes));
     }
 
 }

@@ -13,6 +13,7 @@ use Raxos\Search\ScoreExpression;
 
 final readonly class ConstantScoreFilter implements FilterInterface
 {
+
     public function __construct(public int $score, public int $weight, public ?string $modelClass = null, public ?string $modelKey = null) {}
 
     public function apply(StructureInterface $structure, Filter $attribute, QueryInterface $query, QueryNodeInterface $searchQuery): ScoreExpression
@@ -21,4 +22,5 @@ final readonly class ConstantScoreFilter implements FilterInterface
 
         return new ScoreExpression(new Literal($this->score), weight: $this->weight);
     }
+
 }

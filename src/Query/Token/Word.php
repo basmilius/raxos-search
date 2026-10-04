@@ -30,6 +30,7 @@ final readonly class Word implements QueryNodeInterface, QueryTextNodeInterface,
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */

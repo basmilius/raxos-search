@@ -2,9 +2,10 @@
 declare(strict_types=1);
 
 use Raxos\Collection\Map;
+use Raxos\Search\Error\UnexpectedTokenException;
 use Raxos\Search\Filter\Exact;
 use Raxos\Search\Query\{Lexer, Parser};
-use Raxos\Search\Query\Token\{Field, NumberValue, Phrase, RangeValue};
+use Raxos\Search\Query\Token\{Field, NumberValue, Phrase, RangeValue, Words};
 
 covers(Parser::class);
 
@@ -34,7 +35,7 @@ it('keeps zero-valued structured filter inputs and omits missing or empty ones',
 
 it('accepts whitespace before field separators and preserves quoted and multiword field values', function (): void {
     $nodes = new Parser(new Lexer('Title : blue sky next: "hello world" empty:')->tokenize())->parse()->nodes;
-    expect($nodes)->toHaveCount(3)->and($nodes[0]->key)->toBe('title')->and($nodes[0]->value)->toBeInstanceOf(Raxos\Search\Query\Token\Words::class)
+    expect($nodes)->toHaveCount(3)->and($nodes[0]->key)->toBe('title')->and($nodes[0]->value)->toBeInstanceOf(Words::class)
         ->and((string)$nodes[0]->value)->toBe('blue sky')->and($nodes[1]->value->text)->toBe('hello world')->and($nodes[2]->value)->toBeNull();
 });
 
@@ -48,7 +49,7 @@ it('parses signed numbers and calendar dates with open or closed ranges', functi
 ]);
 
 it('rejects unexpected syntax instead of consuming it as a valid word', function (string $input): void {
-    expect(fn() => new Parser(new Lexer($input)->tokenize())->parse())->toThrow(Raxos\Search\Error\UnexpectedTokenException::class);
+    expect(fn() => new Parser(new Lexer($input)->tokenize())->parse())->toThrow(UnexpectedTokenException::class);
 })->with([':', '..']);
 
 it('normalizes free text before and after filters while keeping field values typed', function (): void {
